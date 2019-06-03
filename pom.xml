@@ -14,9 +14,9 @@
     <name>wellness</name>
     <description>wellness bet</description>
 
-    <properties>
+    <!-- <properties>
         <java.version>11</java.version>
-    </properties>
+    </properties> -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -88,6 +88,7 @@
               <configuration>
                 <source>1.8</source>
                 <target>1.8</target>
+                <release>11</release>
               </configuration>
             </plugin>
         </plugins>
