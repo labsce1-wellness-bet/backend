@@ -1,6 +1,5 @@
 package com.lambdaschool.wellness.controllers;
 
-
 import com.lambdaschool.wellness.model.User;
 import com.lambdaschool.wellness.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +15,16 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
-//@CrossOrigin("http://localhost:3000")
-public class UserController
-{
+// @CrossOrigin("http://localhost:3000")
+public class UserController {
     @Autowired
     private UserService userService;
 
     @PostMapping("")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result)
-    {
-        if(result.hasErrors()){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result) {
+        if (result.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
-            for(FieldError error:result.getFieldErrors()){
+            for (FieldError error : result.getFieldErrors()) {
 
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
@@ -38,16 +35,14 @@ public class UserController
     }
 
     @GetMapping("/all")
-    public Iterable<User>getAllUsers(){
+    public Iterable<User> getAllUsers() {
         return userService.findAll();
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable Long id){
+    public ResponseEntity<?> getProductById(@PathVariable Long id) {
         User user = userService.findById(id);
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
-
-
-
 
 }
