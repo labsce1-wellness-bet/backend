@@ -6,66 +6,58 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "User")
-public class User
-{
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @JsonIgnore
+    // @JsonIgnore
     private String fname;
 
-    @JsonIgnore
+    // @JsonIgnore
     private String lname;
 
     private String fullname;
 
     private String email;
 
-    public User()
-    {
-        //default constructor
+    public User() {
+        // default constructor
     }
 
-    public long getId()
-    {
+    public long getId() {
         return id;
     }
 
-    public String getFname()
-    {
+    public String getFname() {
         return fname;
     }
 
-    public void setFname(String fname)
-    {
+    public void setFname(String fname) {
         this.fname = fname;
     }
 
-    public String getLname()
-    {
+    public String getLname() {
         return lname;
     }
 
-    public void setLname(String lname)
-    {
+    public void setLname(String lname) {
         this.lname = lname;
     }
 
-    public String getFullname()
-    {
-        return lname + " " + fname;
+    public String getFullname() {
+        return "Caleb Kirkwood";
     }
 
+    public void setFullname(String fname, String lname) {
+        this.fullname = fname + ' ' + lname;
+    }
 
-
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email)
-    {
+    public void setEmail(String email) {
         this.email = email;
     }
 }
