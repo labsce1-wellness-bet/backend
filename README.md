@@ -24,7 +24,7 @@ To get the server running locally:
 - `cd` into repo
 - Run `mvn package` to compile executable JAR file
 - Run `java -jar target/wellness-0.0.1-SNAPSHOT.jar`
-- Once done backend runs at http://localhost:5000/ or the PORT defined in `src/resources/application.properties
+- Once done backend runs at http://localhost:5000/ or the PORT defined in `src/resources/application.properties`
 
 ### Backend framework goes here
 
