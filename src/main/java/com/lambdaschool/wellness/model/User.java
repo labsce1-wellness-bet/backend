@@ -11,10 +11,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    // @JsonIgnore
     private String fname;
 
-    // @JsonIgnore
     private String lname;
 
     private String fullname;
@@ -33,24 +31,20 @@ public class User {
         return fname;
     }
 
-    public void setFname(String fname) {
-        this.fname = fname;
-    }
+    // public void setFname(String fname) {
+    // this.fname = fname;
+    // }
 
     public String getLname() {
         return lname;
     }
 
-    public void setLname(String lname) {
-        this.lname = lname;
-    }
+    // public void setLname(String lname) {
+    // this.lname = lname;
+    // }
 
     public String getFullname() {
-        return "Caleb Kirkwood";
-    }
-
-    public void setFullname(String fname, String lname) {
-        this.fullname = fname + ' ' + lname;
+        return this.fname + " " + this.lname;
     }
 
     public String getEmail() {
