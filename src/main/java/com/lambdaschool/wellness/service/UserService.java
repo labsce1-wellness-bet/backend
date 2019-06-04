@@ -9,17 +9,17 @@ public class UserService
 {
     @Autowired
     private UserRepository userRepository;
-    public User saveOrUpdateProduct(User user)
-    {
 
-        return userRepository.save(user);
-
-    }
     public Iterable<User>findAll(){
         return userRepository.findAll();
     }
     public User findById(Long id){
+
         return userRepository.getById(id);
     }
 
+    public User saveOrUpdateUser(User user)
+    {
+        return userRepository.save(user);
+    }
 }

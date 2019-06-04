@@ -12,4 +12,5 @@ public class WellnessApplication
         SpringApplication.run(WellnessApplication.class, args);
     }
 
+
 }

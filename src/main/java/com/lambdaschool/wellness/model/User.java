@@ -11,21 +11,19 @@ public class User
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
     @JsonIgnore
-    private String fname;
-
+    private  String fname;
     @JsonIgnore
     private String lname;
-
     private String fullname;
-
     private String email;
 
     public User()
     {
         //default constructor
     }
+
+
 
     public long getId()
     {
@@ -54,8 +52,9 @@ public class User
 
     public String getFullname()
     {
-        return lname + " " + fname;
+        return this.fullname = lname + " " + fname;
     }
+
 
 
 
