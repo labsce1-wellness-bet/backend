@@ -1,7 +1,5 @@
 package com.lambdaschool.wellness.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
 @Entity
@@ -11,11 +9,12 @@ public class User
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @JsonIgnore
+
     private  String fname;
-    @JsonIgnore
+
     private String lname;
     private String fullname;
+    @Column(unique = true)
     private String email;
 
     public User()
