@@ -1,4 +1,4 @@
-package com.lambdaschool.wellness.model;
+package com.lambdaschool.wellness.service.Cloudinary;
 
 import java.util.Map;
 
