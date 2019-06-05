@@ -17,6 +17,10 @@ public class User
     @Column(unique = true)
     private String email;
 
+    //@OneToMany
+    //working on the relationship
+
+
     public User()
     {
         //default constructor
