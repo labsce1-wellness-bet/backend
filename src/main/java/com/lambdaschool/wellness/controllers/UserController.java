@@ -30,7 +30,7 @@ public class UserController {
             }
             return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
         }
-        User newUser = userService.saveOrUpdateProduct(user);
+        User newUser = userService.saveOrUpdateUser(user);
         return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
     }
 
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable Long id) {
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
         User user = userService.findById(id);
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
