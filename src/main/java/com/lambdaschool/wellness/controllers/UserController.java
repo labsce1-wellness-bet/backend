@@ -14,35 +14,64 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/user")
-// @CrossOrigin("http://localhost:3000")
-public class UserController {
+@RequestMapping("/api/user")
+@CrossOrigin("http://localhost:3000")
+
+public class UserController
+{
     @Autowired
     private UserService userService;
 
-    @PostMapping("")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result) {
-        if (result.hasErrors()) {
-            Map<String, String> errorMap = new HashMap<>();
-            for (FieldError error : result.getFieldErrors()) {
-
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-            return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
-        }
-        User newUser = userService.saveOrUpdateUser(user);
-        return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
-    }
-
     @GetMapping("/all")
-    public Iterable<User> getAllUsers() {
+    public Iterable<User> getAllUsers()
+    {
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+    public ResponseEntity<?> getUserById(@PathVariable Long id)
+    {
         User user = userService.findById(id);
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
+    @PostMapping("")
+    public ResponseEntity<?> addUsers(@Valid @RequestBody User user, BindingResult result)
+    {
+        if (result.hasErrors())
+        {
+            Map<String, String> errorMap = new HashMap<>();
+            for (FieldError error : result.getFieldErrors())
+            {
+                //expound from postman
+                errorMap.put(error.getField(), error.getDefaultMessage());
+            }
+            return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
+        }
+        User newUser = userService.save(user);
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUserById(@PathVariable Long id)
+    {
+        userService.delete(id);
+        return new ResponseEntity<String>("User deleted successfully!", HttpStatus.OK);
+
+    }
+
+    @PutMapping("/{id}")
+    public void updateUser(@PathVariable long id, @RequestBody User user)
+    {
+        userService.updateUser(id, user);
+
+
+    }
+
 }
+
+
+
+
+
+

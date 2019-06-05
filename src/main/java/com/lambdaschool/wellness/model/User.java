@@ -1,7 +1,5 @@
 package com.lambdaschool.wellness.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 
 @Entity
@@ -11,17 +9,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String fname;
+
+    private  String fname;
 
     private String lname;
-
     private String fullname;
-
+    @Column(unique = true)
     private String email;
 
-    public User() {
-        // default constructor
+
+
+    public User()
+    {
+        //default constructor
     }
+
+
+
+   
+    
 
     public long getId() {
         return id;
@@ -43,11 +49,16 @@ public class User {
     // this.lname = lname;
     // }
 
-    public String getFullname() {
-        return this.fname + " " + this.lname;
+    public String getFullname()
+    {
+        return this.fullname = lname + " " + fname;
     }
 
-    public String getEmail() {
+
+
+
+    public String getEmail()
+    {
         return email;
     }
 

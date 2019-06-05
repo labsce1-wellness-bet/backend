@@ -1,13 +1,12 @@
 package com.lambdaschool.wellness.repository;
 
-import com.lambdaschool.wellness.model.User;
+import com.lambdaschool.wellness.model.Competition;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>
+public interface CompetitionRepository extends JpaRepository<Competition, Long>
 {
-    User getById(long id);
-
+    Competition getById(long id);
 
 }
