@@ -1,6 +1,5 @@
 package com.lambdaschool.wellness.controllers;
 
-
 import com.lambdaschool.wellness.model.User;
 import com.lambdaschool.wellness.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
