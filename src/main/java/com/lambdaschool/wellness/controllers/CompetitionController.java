@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-
 @RestController
 @RequestMapping("/api/group")
 @CrossOrigin("http:localhost:3000")
@@ -32,7 +31,7 @@ public class CompetitionController
     }
 
     @PostMapping("")
-    public ResponseEntity<?> addGroup( @RequestBody Competition competition)
+    public ResponseEntity<?> addGroup(@RequestBody Competition competition)
     {
         Competition newGroup = competitionService.save(competition);
         return new ResponseEntity<>(newGroup, HttpStatus.CREATED);
