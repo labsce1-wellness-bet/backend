@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/group")
-@CrossOrigin("http:localhost:3000")
-
 public class CompetitionController
 {
     @Autowired
