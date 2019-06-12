@@ -41,21 +41,23 @@ To get the server running locally:
 
 #### User Routes
 
-| Method | Endpoint        | Access Control | Description                               |
-| ------ | --------------- | -------------- | ----------------------------------------- |
-| GET    | `/user/all`     | admin          | Returns list and information on all users |
-| GET    | `/user/:userId` | all users      | Retrieve data of one user by id           |
-| POST   | `/user`         | none           | Create new user                           |
+| Method | Endpoint            | Access Control | Description                               |
+| ------ | ------------------- | -------------- | ----------------------------------------- |
+| GET    | `/api/user/all`     | admin          | Returns list and information on all users |
+| GET    | `/api/user/:userId` | all users      | Retrieve data of one user by id           |
+| POST   | `/api/user`         | none           | Create new user                           |
+| DELETE | `/api/user/:userid` | all users      | delete user                               |
+| PUT    | `/api/user/:userid` | all users      | update user                               |
 
 #### Group Routes
 
-| Method | Endpoint  | Access Control | Description |
-| ------ | --------- | -------------- | ----------- |
-| GET    | `/groups` | all users      |             |
-| POST   | `/groups` | Admin of group |             |
-| PUT    | `/groups` | Admin of group |             |
-| DELETE | `/groups` | Admin of group |             |
-
+| Method | Endpoint               | Access Control | Description |
+| ------ | -----------------------| -------------- | ----------- |
+| GET    | `/api/groups/all`      | all users      |             |
+| POST   | `/api/groups`          | Admin of group |             |
+| PUT    | `/api/groups/:groupid` | Admin of group |             |
+| DELETE | `/api/groups/:groupid` | Admin of group |             |
+| GET    | `/api/groups/:groupid` | all users      |             |
 # Data Model
 
 🚫This is just an example. Replace this with your data model
@@ -82,6 +84,15 @@ To get the server running locally:
 {
   id: UUID
   name: STRING
+  message:STRING
+  activity:STRING
+  goal: INT
+  admin: STRING
+  bet_amount: INT
+  invite_code: STRING
+  start_date: STRING
+  end_date: STRING
+  
 }
 ```
 

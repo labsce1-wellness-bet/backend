@@ -19,21 +19,21 @@ public class CompetitionService
 
     public Competition findById(Long id){
 
-        return competitionRepository.getById(id);
+        return competitionRepository.findByGroupid(id);
     }
 
-    public Competition save(Competition competition)
+    public Competition save(Competition newGroup)
     {
-        return competitionRepository.save(competition);
+        return competitionRepository.save(newGroup);
     }
 
-    public void delete(Long id)
+    public void delete(Long groupid)
     {
-        Competition competition = findById(id);
+        Competition competition = findById(groupid);
         competitionRepository.delete(competition);
     }
 
-    public void updateGroup(long id, Competition competition)
+    public void updateGroup(Long groupid, Competition competition)
     {
         competitionRepository.save(competition);
 

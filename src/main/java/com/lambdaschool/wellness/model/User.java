@@ -1,22 +1,33 @@
 package com.lambdaschool.wellness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "User")
+@Data
 public class User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long userid;
 
 
     private String fname;
 
     private String lname;
-    private String fullname;
+
     @Column(unique = true)
     private String email;
+    //many to many
+    //
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
+    private List<Competition> competition = new ArrayList<>();
 
 
     public User()
@@ -24,10 +35,24 @@ public class User
         //default constructor
     }
 
-
-    public long getId()
+    public List<Competition> getCompetition()
     {
-        return id;
+        return competition;
+    }
+
+    public void setCompetition(List<Competition> competition)
+    {
+        this.competition = competition;
+    }
+
+    public long getUserid()
+    {
+        return userid;
+    }
+
+    public void setUserid(long userid)
+    {
+        this.userid = userid;
     }
 
     public String getFname()
@@ -50,12 +75,6 @@ public class User
         this.lname = lname;
     }
 
-    public String getFullname()
-    {
-        return this.fullname = fname + " " + lname;
-    }
-
-
     public String getEmail()
     {
         return email;
@@ -65,4 +84,8 @@ public class User
     {
         this.email = email;
     }
+
+
 }
+
+

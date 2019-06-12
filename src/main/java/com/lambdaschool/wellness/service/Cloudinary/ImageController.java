@@ -1,5 +1,5 @@
 package com.lambdaschool.wellness.service.Cloudinary;
-//https://wellness-bet-backend.herokuapp.com/api/user/2
+
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
