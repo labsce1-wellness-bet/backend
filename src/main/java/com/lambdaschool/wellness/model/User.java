@@ -79,7 +79,7 @@ public class User
 
     
     public String getFullname() {
-        return this.fullname = lname + " " + fname;
+        return this.fullname = fname + " " + lname;
     }
 
     public String getUsername() {
