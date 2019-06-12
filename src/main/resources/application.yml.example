@@ -1,0 +1,9 @@
+# Configure database properties for local testing
+spring:
+  datasource:
+    # jdbc:mysql://localhost:PORT/DATABASE_NAME (ex. jdbc:mysql://localhost:3306/wellness_db)
+    url: jdbc:mysql://localhost:3306/wellness_test
+    # Username "root" unless created another user
+    username: root
+    # Password MYSQL_ROOT_PASSWORD env var
+    password: secretpassword

@@ -16,8 +16,6 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin("http://localhost:3000")
-
 public class UserController
 {
     @Autowired

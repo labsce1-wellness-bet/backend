@@ -21,10 +21,16 @@ To get the server running locally:
 - Download and install [Maven](https://maven.apache.org/index.html)
 - Clone this repo
 - Open terminal
+- Follow steps to set up [MySQL DB w/ Docker for local testing](https://github.com/labsce1-wellness-bet/backend/wiki/MySQL-DB-w--Docker-for-local-testing)
 - `cd` into repo
+- Set up `application.yml` file
+  - Open `src/main/resources`
+  - Copy `application.yml.example` into a new `application.yml` file
+  - Follow instructions inside file to set up
 - Run `mvn package` to compile executable JAR file
 - Run `java -jar target/wellness-0.0.1-SNAPSHOT.jar`
 - Once done backend runs at http://localhost:5000/ or the PORT defined in `src/resources/application.properties`
+- If database table doesn't migrate you may need to go into `application.properties` and set `spring.jpa.hibernate.ddl-auto=create`.
 
 ### Backend framework goes here
 

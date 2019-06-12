@@ -16,11 +16,12 @@ public class User
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long userid;
 
-
     private String fname;
 
     private String lname;
 
+    @Column(unique = true)
+    private String username;
     @Column(unique = true)
     private String email;
     //many to many
@@ -75,8 +76,16 @@ public class User
         this.lname = lname;
     }
 
-    public String getEmail()
-    {
+    
+    public String getFullname() {
+        return this.fullname = lname + " " + fname;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
         return email;
     }
 
@@ -84,7 +93,6 @@ public class User
     {
         this.email = email;
     }
-
 
 }
 
