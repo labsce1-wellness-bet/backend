@@ -1,17 +1,18 @@
 package com.lambdaschool.wellness.controllers;
+//https:////wellness-bet-backend.herokuapp.com/api/user/2
 
 import com.lambdaschool.wellness.model.User;
 import com.lambdaschool.wellness.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping("/api/user")
@@ -26,42 +27,50 @@ public class UserController
         return userService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id)
+    @GetMapping("/{userid}")
+    public ResponseEntity<?> getByUserid(@PathVariable Long userid)
     {
-        User user = userService.findById(id);
+        User user = userService.findByUserid(userid);
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> addUsers(@Valid @RequestBody User user, BindingResult result)
+    @GetMapping(value ="/{lname}")
+    public ResponseEntity<?> getUsersByLname(@PathVariable String lname)
     {
-        if (result.hasErrors())
-        {
-            Map<String, String> errorMap = new HashMap<>();
-            for (FieldError error : result.getFieldErrors())
-            {
-                //expound from postman
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-            return new ResponseEntity<Map<String, String>>(errorMap, HttpStatus.BAD_REQUEST);
-        }
-        User newUser = userService.save(user);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        userService.findByLname(lname);
+        return new ResponseEntity<>(lname,HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUserById(@PathVariable Long id)
+    @PostMapping("")
+    public ResponseEntity<?> addNewUsers(@Valid @RequestBody User newUser) throws URISyntaxException
     {
-        userService.delete(id);
+         newUser = userService.save(newUser);
+         HttpHeaders responseHeaders = new HttpHeaders();
+        URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/userid").buildAndExpand(newUser.getUserid()).toUri();
+        responseHeaders.setLocation(newUserURI);
+        return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{userid}")
+    public ResponseEntity<?> findById(@PathVariable Long userid)
+    {
+        userService.delete(userid);
         return new ResponseEntity<String>("User deleted successfully!", HttpStatus.OK);
 
     }
 
-    @PutMapping("/{id}")
-    public void updateUser(@PathVariable long id, @RequestBody User user)
+    @PutMapping("/{userid}")
+    public ResponseEntity<?> saveUser( @RequestBody User user,@PathVariable long userid)
     {
-        userService.updateUser(id, user);
+        User newUser = new User();
+
+        newUser.setUserid(userid);
+        newUser.setFname(user.getFname());
+        newUser.setLname(user.getLname());
+        newUser.setEmail(user.getEmail());
+        userService.save(newUser);
+
+        return new ResponseEntity<>(newUser,HttpStatus.OK);
 
 
     }

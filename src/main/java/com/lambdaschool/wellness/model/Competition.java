@@ -1,27 +1,20 @@
 package com.lambdaschool.wellness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Competition")
+@Table(name = "competitions")
+@Data
 public class Competition
 {
-//    ID | int
-//    Group_name | string
-//    Type | string (ex. Sleeping)
-//    Goal | int
-//    Goal_metric | string (ex. Hours, minutes)
-//    Admin | int | User ID foreign key
-//    Bet_amount | int
-//    join_code | string
-//    Start_date | date
-//    End_date | date
-//    Message | string
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long groupid;
 
     private String group_name;
 
@@ -34,20 +27,49 @@ public class Competition
     private String start_date;
     private String end_date;
     private String message;
+    //Todo:ManytoMany
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid")
+    @JsonIgnoreProperties({"competitions", "hibernateLazyInitializer"})
+    private User user;
 
     public Competition()
     {
         //default constructor
     }
 
-    public long getId()
+    public Competition(String group_name, String activity, int goal, String admin, int bet_amount, String invite_code, String start_date, String end_date, String message, Competition competition)
     {
-        return id;
+        this.group_name = group_name;
+        this.activity = activity;
+        this.goal = goal;
+        this.admin = admin;
+        this.bet_amount = bet_amount;
+        this.invite_code = invite_code;
+        this.start_date = start_date;
+        this.end_date = end_date;
+        this.message = message;
+        this.user= user;
     }
 
-    public void setId(long id)
+    public User getUser()
     {
-        this.id = id;
+        return user;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
+    }
+
+    public long getGroupid()
+    {
+        return groupid;
+    }
+
+    public void setGroupid(long groupid)
+    {
+        this.groupid = groupid;
     }
 
     public String getGroup_name()
@@ -139,4 +161,6 @@ public class Competition
     {
         this.message = message;
     }
+
+
 }

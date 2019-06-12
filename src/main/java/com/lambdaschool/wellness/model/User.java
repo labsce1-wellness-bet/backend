@@ -1,48 +1,83 @@
 package com.lambdaschool.wellness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Data;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "User")
-public class User {
+@Data
+public class User
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private long userid;
 
     private String fname;
 
     private String lname;
     private String fullname;
+
     @Column(unique = true)
     private String username;
     @Column(unique = true)
     private String email;
-    private String password;
+    //many to many
 
-    public User() {
-        // default constructor
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
+    private List<Competition> competition = new ArrayList<>();
+
+
+    public User()
+    {
+        //default constructor
     }
 
-    public long getId() {
-        return id;
+    public List<Competition> getCompetition()
+    {
+        return competition;
     }
 
-    public String getFname() {
+    public void setCompetition(List<Competition> competition)
+    {
+        this.competition = competition;
+    }
+
+    public long getUserid()
+    {
+        return userid;
+    }
+
+    public void setUserid(long userid)
+    {
+        this.userid = userid;
+    }
+
+    public String getFname()
+    {
         return fname;
     }
 
-    // public void setFname(String fname) {
-    // this.fname = fname;
-    // }
+    public void setFname(String fname)
+    {
+        this.fname = fname;
+    }
 
-    public String getLname() {
+    public String getLname()
+    {
         return lname;
     }
 
-    // public void setLname(String lname) {
-    // this.lname = lname;
-    // }
+    public void setLname(String lname)
+    {
+        this.lname = lname;
+    }
 
+    
     public String getFullname() {
         return this.fullname = lname + " " + fname;
     }
@@ -55,11 +90,11 @@ public class User {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email)
+    {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
 }
+
+

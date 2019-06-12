@@ -2,12 +2,13 @@ package com.lambdaschool.wellness.repository;
 
 import com.lambdaschool.wellness.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long>
+public interface UserRepository extends JpaRepository<User,Long>
 {
-    User getById(long id);
+    User findByUserid(long userid);
+    User findByLname(String lname);
+    User findById(long id);
+
 
 
 }

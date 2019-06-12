@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public  class UserService
+public class UserService
 {
 
+
     @Autowired
-    private UserRepository userRepository;
+   private UserRepository userRepository;
 
 
     public Iterable<User>findAll(){
@@ -18,26 +19,39 @@ public  class UserService
         return userRepository.findAll();
     }
 
-    public User findById(Long id){
-
-        return userRepository.getById(id);
-    }
+  public User findById(Long userid)
+  {
+      return userRepository.findByUserid(userid);
+  }
 
     public User save(User user)
     {
         return userRepository.save(user);
     }
 
-    public void delete(Long id)
+    public void delete(Long userid)
     {
-        User user = findById(id);
+        User user = findById(userid);
         userRepository.delete(user);
     }
 
-    public void updateUser(long id, User user)
-    {
-        userRepository.save(user);
 
+
+    public User findByLname(String lname)
+    {
+        return userRepository.findByLname(lname);
+    }
+
+
+
+    public User saveUser(User updateduser)
+    {
+        return userRepository.save(updateduser);
+    }
+
+    public User findByUserid(Long userid)
+    {
+        return userRepository.findByUserid(userid);
     }
 
 }
