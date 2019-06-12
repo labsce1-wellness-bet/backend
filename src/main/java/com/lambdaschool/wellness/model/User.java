@@ -19,13 +19,14 @@ public class User
     private String fname;
 
     private String lname;
+    private String fullname;
 
     @Column(unique = true)
     private String username;
     @Column(unique = true)
     private String email;
     //many to many
-    //
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("user")
     private List<Competition> competition = new ArrayList<>();
