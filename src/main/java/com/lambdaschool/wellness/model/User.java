@@ -1,5 +1,6 @@
 package com.lambdaschool.wellness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
@@ -25,6 +26,7 @@ public class User {
     private String username;
     @Column(unique = true)
     private String email;
+    @JsonIgnore
     private String password;
     // many to many
 
