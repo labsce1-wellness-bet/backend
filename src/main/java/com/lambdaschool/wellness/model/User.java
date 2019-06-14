@@ -13,6 +13,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
     private long userid;
 
     private String fname;
@@ -81,10 +82,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String password() {
-        return password;
     }
 
 }
