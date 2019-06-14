@@ -28,6 +28,10 @@ public class User {
     private String email;
     @JsonIgnore
     private String password;
+    @JsonIgnore
+    private String fitbitRefresh;
+    @JsonIgnore
+    private String fitbitAccess;
     // many to many
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
