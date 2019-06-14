@@ -13,77 +13,61 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-
+@RequestMapping(value = "/api/competition")
 @RestController
-@RequestMapping(value = "/api/groups")
-@CrossOrigin("http:localhost:3000")
-
 public class CompetitionController
 {
     @Autowired
     private CompetitionService competitionService;
 
     @GetMapping("/all")
-    public Iterable<Competition> getAllGroups()
+    public Iterable<Competition> getAllComp()
     {
         return competitionService.findAll();
     }
 
-    @GetMapping("/{groupid}")
-    public ResponseEntity<?> getGroupById(@PathVariable Long groupid)
+    @GetMapping("/{compid}")
+    public ResponseEntity<?> getByCompid(@PathVariable Long compid)
     {
-        Competition competition = competitionService.findById(groupid);
+        Competition competition = competitionService.findById(compid);
         return new ResponseEntity<Competition>(competition, HttpStatus.OK);
     }
 
+
     @PostMapping("")
-    public ResponseEntity<?> addNewGroup(@Valid @RequestBody Competition newGroup) throws URISyntaxException
+    public ResponseEntity<?> addNewComp(@Valid @RequestBody Competition newComp) throws URISyntaxException
     {
-        newGroup = competitionService.save(newGroup);
+        newComp = competitionService.save(newComp);
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/groupid").buildAndExpand(newGroup.getGroupid()).toUri();
+        URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/compid").buildAndExpand(newComp.getCompid()).toUri();
         responseHeaders.setLocation(newUserURI);
-        return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<Object>(newComp, HttpStatus.CREATED);
     }
 
-
-
-    @DeleteMapping("/{groupid}")
-    public ResponseEntity<?> deleteGroupById(@PathVariable Long groupid)
+    @DeleteMapping("/{compid}")
+    public ResponseEntity<?> findById(@PathVariable Long compid)
     {
-        competitionService.delete(groupid);
-        return new ResponseEntity<String>("Group deleted successfully!", HttpStatus.OK);
+        competitionService.delete(compid);
+        return new ResponseEntity<String>("Competition deleted successfully!", HttpStatus.OK);
 
     }
 
-    @PutMapping("/{groupid}")
-    public ResponseEntity<?> saveGroup(@RequestBody Competition competition, @PathVariable long groupid)
+    @PutMapping("/{compid}")
+    public ResponseEntity<?> saveComp(@RequestBody Competition competition, @PathVariable long compid)
     {
-        Competition newGroup = new Competition();
+        Competition newComp = new Competition();
 
-        newGroup.setGroupid(groupid);
-        newGroup.setGroup_name(competition.getGroup_name());
-        newGroup.setActivity(competition.getActivity());
-        newGroup.setGoal(competition.getGoal());
-        newGroup.setAdmin(competition.getAdmin());
-        newGroup.setBet_amount(competition.getBet_amount());
-        newGroup.setMessage(competition.getMessage());
-        newGroup.setStart_date(competition.getStart_date());
-        newGroup.setEnd_date(competition.getEnd_date());
-        newGroup.setInvite_code(competition.getInvite_code());
-        competitionService.save(newGroup);
+        newComp.setCompid(compid);
+        newComp.setCompetitionType(competition.getCompetitionType());
+        newComp.setMessage(competition.getMessage());
+        newComp.setBetAmount(competition.getBetAmount());
+        newComp.setStartDate(competition.getStartDate());
+        newComp.setEndDate(competition.getEndDate());
+        competitionService.save(newComp);
 
-        return new ResponseEntity<>(newGroup,HttpStatus.OK);
+        return new ResponseEntity<>(newComp,HttpStatus.OK);
 
 
     }
 
 }
-
-
-
-
-
-
-
-
