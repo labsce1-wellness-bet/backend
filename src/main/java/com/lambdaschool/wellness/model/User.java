@@ -1,6 +1,5 @@
 package com.lambdaschool.wellness.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,26 +24,35 @@ public class User
     private String username;
     @Column(unique = true)
     private String email;
-    //many to many
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("user")
-    private List<Competition> competition = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "User_group_Comp", joinColumns = @JoinColumn(name = "userid"),
+            inverseJoinColumns = @JoinColumn(name = "groupid") )
+    private List<Group> groups = new ArrayList<>();
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "User_group_Comp", joinColumns = @JoinColumn(name = "userid"),
+    inverseJoinColumns = @JoinColumn(name = "compid"))
+    private List<Competition> competitions = new ArrayList<>();
 
     public User()
     {
         //default constructor
     }
 
-    public List<Competition> getCompetition()
+    public void setUsername(String username)
     {
-        return competition;
+        this.username = username;
     }
 
-    public void setCompetition(List<Competition> competition)
+    public List<Group> getGroups()
     {
-        this.competition = competition;
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups)
+    {
+        this.groups = groups;
     }
 
     public long getUserid()

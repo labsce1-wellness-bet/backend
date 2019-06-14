@@ -11,34 +11,31 @@ public class CompetitionService
     @Autowired
     private CompetitionRepository competitionRepository;
 
-
     public Iterable<Competition>findAll(){
 
         return competitionRepository.findAll();
     }
 
-    public Competition findById(Long id){
+    public Competition findById(Long compid){
 
-        return competitionRepository.findByGroupid(id);
+        return competitionRepository.findCompetitionByCompid(compid);
     }
 
-    public Competition save(Competition newGroup)
+    public Competition save(Competition newComp)
     {
-        return competitionRepository.save(newGroup);
+        return competitionRepository.save(newComp);
     }
 
-    public void delete(Long groupid)
+    public void delete(Long compid)
     {
-        Competition competition = findById(groupid);
+        Competition competition = findById(compid);
         competitionRepository.delete(competition);
     }
 
-    public void updateGroup(Long groupid, Competition competition)
+    public void updateComp(Long compid, Competition competition)
     {
         competitionRepository.save(competition);
 
     }
 
 }
-
-
