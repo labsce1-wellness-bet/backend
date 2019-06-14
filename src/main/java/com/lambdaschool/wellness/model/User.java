@@ -1,7 +1,7 @@
 package com.lambdaschool.wellness.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,7 +14,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
+    @Column(name = "userid")
     private long userid;
 
     private String fname;
@@ -26,6 +26,7 @@ public class User {
     private String username;
     @Column(unique = true)
     private String email;
+
     @JsonIgnore
     private String password;
     @JsonIgnore
@@ -34,20 +35,28 @@ public class User {
     private String fitbitAccess;
     // many to many
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("user")
-    private List<Competition> competition = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "User_group_Comp", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "groupid"))
+    private List<Group> groups = new ArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "User_group_Comp", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "compid"))
+    private List<Competition> competitions = new ArrayList<>();
 
     public User() {
         // default constructor
     }
 
-    public List<Competition> getCompetition() {
-        return competition;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setCompetition(List<Competition> competition) {
-        this.competition = competition;
+    public List<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
 
     public long getUserid() {

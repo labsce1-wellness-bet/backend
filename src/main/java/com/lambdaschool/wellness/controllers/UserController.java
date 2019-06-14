@@ -31,11 +31,12 @@ public class UserController {
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/{lname}")
-    public ResponseEntity<?> getUsersByLname(@PathVariable String lname) {
-        userService.findByLname(lname);
-        return new ResponseEntity<>(lname, HttpStatus.OK);
-    }
+    // @GetMapping(value ="/{lname}")
+    // public ResponseEntity<?> getUsersByLname(@PathVariable String lname)
+    // {
+    // userService.findByLname(lname);
+    // return new ResponseEntity<>(lname,HttpStatus.OK);
+    // }
 
     @PostMapping("")
     public ResponseEntity<?> addNewUsers(@Valid @RequestBody User newUser) throws URISyntaxException {
