@@ -1,5 +1,6 @@
 package com.lambdaschool.wellness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
@@ -10,10 +11,10 @@ import java.util.List;
 @Entity
 @Table(name = "User")
 @Data
-public class User
-{
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private long userid;
 
     private String fname;
@@ -25,61 +26,52 @@ public class User
     private String username;
     @Column(unique = true)
     private String email;
-    //many to many
+    @JsonIgnore
+    private String password;
+    // many to many
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("user")
     private List<Competition> competition = new ArrayList<>();
 
-
-    public User()
-    {
-        //default constructor
+    public User() {
+        // default constructor
     }
 
-    public List<Competition> getCompetition()
-    {
+    public List<Competition> getCompetition() {
         return competition;
     }
 
-    public void setCompetition(List<Competition> competition)
-    {
+    public void setCompetition(List<Competition> competition) {
         this.competition = competition;
     }
 
-    public long getUserid()
-    {
+    public long getUserid() {
         return userid;
     }
 
-    public void setUserid(long userid)
-    {
+    public void setUserid(long userid) {
         this.userid = userid;
     }
 
-    public String getFname()
-    {
+    public String getFname() {
         return fname;
     }
 
-    public void setFname(String fname)
-    {
+    public void setFname(String fname) {
         this.fname = fname;
     }
 
-    public String getLname()
-    {
+    public String getLname() {
         return lname;
     }
 
-    public void setLname(String lname)
-    {
+    public void setLname(String lname) {
         this.lname = lname;
     }
 
-    
     public String getFullname() {
-        return this.fullname = lname + " " + fname;
+        return this.fullname = fname + " " + lname;
     }
 
     public String getUsername() {
@@ -90,11 +82,8 @@ public class User
         return email;
     }
 
-    public void setEmail(String email)
-    {
+    public void setEmail(String email) {
         this.email = email;
     }
 
 }
-
-

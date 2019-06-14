@@ -29,7 +29,7 @@
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
 
-         <dependency>
+         <!-- <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency> -->
@@ -59,7 +59,7 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-         https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -86,13 +86,6 @@
             <version>8.0.16</version>
         </dependency>
 
-
-
-
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
     </dependencies>
     
     <build>
