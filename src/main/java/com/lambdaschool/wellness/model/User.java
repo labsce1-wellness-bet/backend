@@ -90,4 +90,20 @@ public class User {
         this.email = email;
     }
 
+    public String getFitbitAccess() {
+        return fitbitAccess;
+    }
+
+    public void setFitbitAccess(String fitbitAccess) {
+        this.fitbitAccess = fitbitAccess;
+    }
+
+    public String getFitbitRefresh() {
+        return fitbitRefresh;
+    }
+
+    public void setFitbitRefresh(String fitbitRefresh) {
+        this.fitbitRefresh = fitbitRefresh;
+    }
+
 }
