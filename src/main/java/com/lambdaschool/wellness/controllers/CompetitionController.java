@@ -41,7 +41,7 @@ public class CompetitionController
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/compid").buildAndExpand(newComp.getCompid()).toUri();
         responseHeaders.setLocation(newUserURI);
-        return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<Object>(newComp, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{compid}")
