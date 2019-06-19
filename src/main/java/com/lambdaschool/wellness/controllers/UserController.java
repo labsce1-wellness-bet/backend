@@ -1,7 +1,10 @@
 package com.lambdaschool.wellness.controllers;
 //https:////wellness-bet-backend.herokuapp.com/api/user/2
 
+import com.auth0.jwk.Jwk;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lambdaschool.wellness.model.User;
+import com.lambdaschool.wellness.service.Auth0.JWTHelper;
 import com.lambdaschool.wellness.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -10,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,9 +24,19 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private HttpServletRequest request;
+
     @GetMapping("/all")
-    public Iterable<User> getAllUsers() {
+    public Iterable<User> getAllUsers() throws Exception {
+
+        String authHeader = request.getHeader("Authorization").split(" ")[1];
+        DecodedJWT decodedJWT = JWTHelper.getDecodedJWT(authHeader);
+        Jwk jwk = JWTHelper.getJwk(decodedJWT);
+        JWTHelper.verifyDecodedJWT(jwk, decodedJWT);
+
         return userService.findAll();
+
     }
 
     @GetMapping("/{userid}")
