@@ -18,6 +18,7 @@ public class Group
     private long groupid;
     private String group_name;
     private int goal;
+    //Todo:change it to string min 6 hours
     private String admin;
     private String invite_code;
 

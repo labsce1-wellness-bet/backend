@@ -14,7 +14,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "userid")
+    @Column(name = "id")
     private long userid;
 
     private String fname;
@@ -34,13 +34,12 @@ public class User {
     @JsonIgnore
     private String fitbitAccess;
     // many to many
-
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "User_group_Comp", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "groupid"))
+    @JoinTable(name = "User_group_Comp", joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "groupid"))
     private List<Group> groups = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "User_group_Comp", joinColumns = @JoinColumn(name = "userid"), inverseJoinColumns = @JoinColumn(name = "compid"))
+    @JoinTable(name = "User_group_Comp", joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "compid"))
     private List<Competition> competitions = new ArrayList<>();
 
     public User() {

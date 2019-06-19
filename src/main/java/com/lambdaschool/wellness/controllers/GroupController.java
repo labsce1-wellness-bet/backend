@@ -43,7 +43,7 @@ public class GroupController
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/groupid").buildAndExpand(newGroup.getGroupid()).toUri();
         responseHeaders.setLocation(newUserURI);
-        return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(newGroup,HttpStatus.CREATED);
     }
 
 
