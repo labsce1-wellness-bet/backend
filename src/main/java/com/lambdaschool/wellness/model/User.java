@@ -6,7 +6,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.ArrayList;
 import java.util.Set;
 
 @Entity
@@ -16,6 +15,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
+
     private long userid;
 
     private String fname;
@@ -33,13 +33,13 @@ public class User {
 
     @ManyToMany
     @JoinTable(name = "user_group_competition",
-            joinColumns = {@JoinColumn(name = "userid")},
+            joinColumns = {@JoinColumn(name = "userid", referencedColumnName = "id")},
     inverseJoinColumns = {@JoinColumn(name = "groupid")})
     private Set<Group> group = new HashSet<Group>();
 
     @ManyToMany
     @JoinTable(name = "user_group_competition",
-            joinColumns = {@JoinColumn(name = "userid")},
+            joinColumns = {@JoinColumn(name = "userid", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "compid")})
     private Set<Competition> competition = new HashSet<Competition>();
     // @JsonIgnore

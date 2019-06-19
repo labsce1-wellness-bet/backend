@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name = "groups")
+@Table(name = "wellnes")
 @Data
 
 public class Group
