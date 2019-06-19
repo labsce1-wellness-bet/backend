@@ -45,7 +45,7 @@ public class UserController {
         URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/userid")
                 .buildAndExpand(newUser.getUserid()).toUri();
         responseHeaders.setLocation(newUserURI);
-        return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{userid}")

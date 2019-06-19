@@ -1,20 +1,21 @@
 package com.lambdaschool.wellness.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 @Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
+
     private long userid;
 
     private String fname;
@@ -29,33 +30,69 @@ public class User {
 
     @JsonIgnore
     private String password;
+
+    @ManyToMany
+    @JoinTable(name = "user_group_competition",
+            joinColumns = {@JoinColumn(name = "userid")},
+    inverseJoinColumns = {@JoinColumn(name = "groupid")})
+    private Set<Group> group = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "user_group_competition",
+            joinColumns = {@JoinColumn(name = "userid")},
+            inverseJoinColumns = {@JoinColumn(name = "compid")})
+    private Set<Competition> competition = new HashSet<>();
     // @JsonIgnore
     private String fitbitRefresh;
     // @JsonIgnore
     private String fitbitAccess;
     // many to many
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "User_group_Comp", joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "groupid"))
-    private List<Group> groups = new ArrayList<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "User_group_Comp", joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "compid"))
-    private List<Competition> competitions = new ArrayList<>();
 
-    public User() {
-        // default constructor
+
+    public User()
+    {
+        //default constructor
     }
 
-    public void setUsername(String username) {
+    public Set<Group> getGroup()
+    {
+        return group;
+    }
+
+    public void setGroup(Set<Group> group)
+    {
+        this.group = group;
+    }
+
+    public Set<Competition> getCompetition()
+    {
+        return competition;
+    }
+
+    public void setCompetition(Set<Competition> competition)
+    {
+        this.competition = competition;
+    }
+
+    public void setFullname(String fullname)
+    {
+        this.fullname = fullname;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+
+    public void setUsername(String username)
+    {
         this.username = username;
-    }
-
-    public List<Group> getGroups() {
-        return groups;
-    }
-
-    public void setGroups(List<Group> groups) {
-        this.groups = groups;
     }
 
     public long getUserid() {

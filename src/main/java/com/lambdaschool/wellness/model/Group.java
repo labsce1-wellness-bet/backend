@@ -3,30 +3,30 @@ package com.lambdaschool.wellness.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
-// @Table(name = "groups") throws error when getting an user after creation, because groups is a reserved word.
 @Entity
-@Table(name = "groups_")
+@Table(name = "wellness_groups")
 @Data
 
-public class Group {
+public class Group
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long groupid;
     private String group_name;
     private int goal;
-    // Todo:change it to string min 6 hours
+    //Todo:change it to string min 6 hours
     private String admin;
     private String invite_code;
 
-    @ManyToMany(mappedBy = "groups")
-    private List<User> users = new ArrayList<>();
 
-    public Group() {
-        // default constructor
+    @ManyToMany(mappedBy = "group")
+    private Set<User> users = new HashSet<>();
+
+    public Group()
+    {
+        //default constructor
     }
 
     public Group(String group_name, int goal, String admin, int bet_amount, String invite_code, String start_date,
@@ -38,43 +38,54 @@ public class Group {
 
     }
 
-    public List<User> getUsers() {
+
+    public Set<User> getUsers()
+    {
         return users;
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(Set<User> users)
+    {
         this.users = users;
     }
 
-    public long getGroupid() {
+    public long getGroupid()
+    {
         return groupid;
     }
 
-    public void setGroupid(long groupid) {
+    public void setGroupid(long groupid)
+    {
         this.groupid = groupid;
     }
 
-    public String getGroup_name() {
+    public String getGroup_name()
+    {
         return group_name;
     }
 
-    public void setGroup_name(String group_name) {
+    public void setGroup_name(String group_name)
+    {
         this.group_name = group_name;
     }
 
-    public int getGoal() {
+    public int getGoal()
+    {
         return goal;
     }
 
-    public void setGoal(int goal) {
+    public void setGoal(int goal)
+    {
         this.goal = goal;
     }
 
-    public String getAdmin() {
+    public String getAdmin()
+    {
         return admin;
     }
 
-    public void setAdmin(String admin) {
+    public void setAdmin(String admin)
+    {
         this.admin = admin;
     }
 
@@ -87,12 +98,15 @@ public class Group {
             builder.append(ALPHABET.charAt(random.nextInt(ALPHABET.length())));
 
         }
-        return builder.toString();
+    return builder.toString();
+
 
     }
 
-    public void setInvite_code(String invite_code) {
-        this.invite_code = invite_code;
-    }
+        public void setInvite_code(String invite_code)
+        {
+            this.invite_code = invite_code;
+        }
+
 
 }
