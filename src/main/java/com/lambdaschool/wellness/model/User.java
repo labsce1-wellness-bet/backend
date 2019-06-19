@@ -29,7 +29,11 @@ public class User {
 
     @JsonIgnore
     private String password;
-
+    // @JsonIgnore
+    private String fitbitRefresh;
+    // @JsonIgnore
+    private String fitbitAccess;
+    // many to many
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "User_group_Comp", joinColumns = @JoinColumn(name = "userid", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "groupid"))
     private List<Group> groups = new ArrayList<>();
@@ -92,6 +96,22 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFitbitAccess() {
+        return fitbitAccess;
+    }
+
+    public void setFitbitAccess(String fitbitAccess) {
+        this.fitbitAccess = fitbitAccess;
+    }
+
+    public String getFitbitRefresh() {
+        return fitbitRefresh;
+    }
+
+    public void setFitbitRefresh(String fitbitRefresh) {
+        this.fitbitRefresh = fitbitRefresh;
     }
 
 }
