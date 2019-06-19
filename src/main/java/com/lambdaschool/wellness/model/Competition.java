@@ -21,7 +21,7 @@ public class Competition
     private String endDate;
 
     @ManyToMany(mappedBy = "competition")
-    private Set<User>  users = new HashSet<User>();
+    private Set<User>  users = new HashSet<>();
 
 
     public Competition()

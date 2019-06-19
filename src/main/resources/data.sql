@@ -1,5 +1,5 @@
 INSERT INTO User
-  (userid, fname, lname, email)
+  (id, fname, lname, email)
 VALUES
   (1, 'Caleb', 'Kirkwood', 'ckirkwood@example.com'),
   (2, 'Admin', 'Istrator', 'admin@example.com'),

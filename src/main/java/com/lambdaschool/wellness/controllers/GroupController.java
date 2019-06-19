@@ -16,7 +16,6 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping(value = "/api/group")
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 
 public class GroupController
 {

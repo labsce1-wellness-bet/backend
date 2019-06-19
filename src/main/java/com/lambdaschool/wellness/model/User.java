@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "User")
+@Table(name = "user")
 @Data
 public class User {
     @Id
@@ -33,15 +33,15 @@ public class User {
 
     @ManyToMany
     @JoinTable(name = "user_group_competition",
-            joinColumns = {@JoinColumn(name = "userid", referencedColumnName = "id")},
+            joinColumns = {@JoinColumn(name = "userid")},
     inverseJoinColumns = {@JoinColumn(name = "groupid")})
-    private Set<Group> group = new HashSet<Group>();
+    private Set<Group> group = new HashSet<>();
 
     @ManyToMany
     @JoinTable(name = "user_group_competition",
-            joinColumns = {@JoinColumn(name = "userid", referencedColumnName = "id")},
+            joinColumns = {@JoinColumn(name = "userid")},
             inverseJoinColumns = {@JoinColumn(name = "compid")})
-    private Set<Competition> competition = new HashSet<Competition>();
+    private Set<Competition> competition = new HashSet<>();
     // @JsonIgnore
     private String fitbitRefresh;
     // @JsonIgnore

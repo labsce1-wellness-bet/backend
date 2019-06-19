@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name = "wellnes")
+@Table(name = "wellness_groups")
 @Data
 
 public class Group
@@ -22,7 +22,7 @@ public class Group
 
 
     @ManyToMany(mappedBy = "group")
-    private Set<User> users = new HashSet<User>();
+    private Set<User> users = new HashSet<>();
 
     public Group()
     {
