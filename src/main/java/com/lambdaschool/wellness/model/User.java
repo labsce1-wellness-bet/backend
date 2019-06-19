@@ -29,9 +29,9 @@ public class User {
 
     @JsonIgnore
     private String password;
-    @JsonIgnore
+    // @JsonIgnore
     private String fitbitRefresh;
-    @JsonIgnore
+    // @JsonIgnore
     private String fitbitAccess;
     // many to many
     @ManyToMany(cascade = CascadeType.ALL)
