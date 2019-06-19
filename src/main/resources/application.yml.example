@@ -7,3 +7,5 @@ spring:
     username: root
     # Password MYSQL_ROOT_PASSWORD env var
     password: secretpassword
+
+DOMAIN_NAME: http://localhost:3000
