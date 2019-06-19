@@ -1,6 +1,5 @@
 package com.lambdaschool.wellness.model;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -32,15 +31,15 @@ public class User {
     private String password;
 
     @ManyToMany
-    @JoinTable(name = "user_group_competition",
-            joinColumns = {@JoinColumn(name = "userid")},
-    inverseJoinColumns = {@JoinColumn(name = "groupid")})
+    @JoinTable(name = "user_group_competition", joinColumns = {
+            @JoinColumn(name = "userid", referencedColumnName = "id") }, inverseJoinColumns = {
+                    @JoinColumn(name = "groupid") })
     private Set<Group> group = new HashSet<>();
 
     @ManyToMany
-    @JoinTable(name = "user_group_competition",
-            joinColumns = {@JoinColumn(name = "userid")},
-            inverseJoinColumns = {@JoinColumn(name = "compid")})
+    @JoinTable(name = "user_group_competition", joinColumns = {
+            @JoinColumn(name = "userid", referencedColumnName = "id") }, inverseJoinColumns = {
+                    @JoinColumn(name = "compid") })
     private Set<Competition> competition = new HashSet<>();
     // @JsonIgnore
     private String fitbitRefresh;
@@ -48,50 +47,39 @@ public class User {
     private String fitbitAccess;
     // many to many
 
-
-
-    public User()
-    {
-        //default constructor
+    public User() {
+        // default constructor
     }
 
-    public Set<Group> getGroup()
-    {
+    public Set<Group> getGroup() {
         return group;
     }
 
-    public void setGroup(Set<Group> group)
-    {
+    public void setGroup(Set<Group> group) {
         this.group = group;
     }
 
-    public Set<Competition> getCompetition()
-    {
+    public Set<Competition> getCompetition() {
         return competition;
     }
 
-    public void setCompetition(Set<Competition> competition)
-    {
+    public void setCompetition(Set<Competition> competition) {
         this.competition = competition;
     }
 
-    public void setFullname(String fullname)
-    {
+    public void setFullname(String fullname) {
         this.fullname = fullname;
     }
 
-    public String getPassword()
-    {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password)
-    {
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    public void setUsername(String username)
-    {
+    public void setUsername(String username) {
         this.username = username;
     }
 
