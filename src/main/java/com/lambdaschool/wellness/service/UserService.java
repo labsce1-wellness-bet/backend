@@ -6,51 +6,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService
-{
-
+public class UserService {
 
     @Autowired
-   private UserRepository userRepository;
+    private UserRepository userRepository;
 
-
-    public Iterable<User>findAll(){
+    public Iterable<User> findAll() {
 
         return userRepository.findAll();
     }
 
-  public User findById(Long userid)
-  {
-      return userRepository.findByUserid(userid);
-  }
+    public User findById(Long userid) {
+        return userRepository.findByUserid(userid);
+    }
 
-    public User save(User user)
-    {
+    public User save(User user) {
         return userRepository.save(user);
     }
 
-    public void delete(Long userid)
-    {
+    public void delete(Long userid) {
         User user = findById(userid);
         userRepository.delete(user);
     }
 
-
-
-    public User findByLname(String lname)
-    {
+    public User findByLname(String lname) {
         return userRepository.findByLname(lname);
     }
 
-
-
-    public User saveUser(User updateduser)
-    {
+    public User saveUser(User updateduser) {
         return userRepository.save(updateduser);
     }
 
-    public User findByUserid(Long userid)
-    {
+    public User findByUserid(Long userid) {
         return userRepository.findByUserid(userid);
     }
 

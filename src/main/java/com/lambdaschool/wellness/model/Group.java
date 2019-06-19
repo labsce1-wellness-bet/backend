@@ -29,8 +29,8 @@ public class Group
         //default constructor
     }
 
-    public Group(String group_name, int goal, String admin, int bet_amount, String invite_code, String start_date, String end_date, String message, Group competition)
-    {
+    public Group(String group_name, int goal, String admin, int bet_amount, String invite_code, String start_date,
+            String end_date, String message, Group competition) {
         this.group_name = group_name;
         this.goal = goal;
         this.admin = admin;
@@ -89,17 +89,13 @@ public class Group
         this.admin = admin;
     }
 
-    public String getInvite_code()
-    {
-        int length =7;
+    public String getInvite_code() {
+        int length = 7;
         final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
         StringBuilder builder = new StringBuilder(length);
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             builder.append(ALPHABET.charAt(random.nextInt(ALPHABET.length())));
-
-
 
         }
     return builder.toString();

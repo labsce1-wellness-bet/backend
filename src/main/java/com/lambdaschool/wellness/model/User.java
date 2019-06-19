@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Set;
 
 @Entity
@@ -41,9 +42,11 @@ public class User {
             joinColumns = {@JoinColumn(name = "userid")},
             inverseJoinColumns = {@JoinColumn(name = "compid")})
     private Set<Competition> competition = new HashSet<Competition>();
-
-
-
+    // @JsonIgnore
+    private String fitbitRefresh;
+    // @JsonIgnore
+    private String fitbitAccess;
+    // many to many
 
 
 
@@ -132,5 +135,20 @@ public class User {
         this.email = email;
     }
 
+    public String getFitbitAccess() {
+        return fitbitAccess;
+    }
+
+    public void setFitbitAccess(String fitbitAccess) {
+        this.fitbitAccess = fitbitAccess;
+    }
+
+    public String getFitbitRefresh() {
+        return fitbitRefresh;
+    }
+
+    public void setFitbitRefresh(String fitbitRefresh) {
+        this.fitbitRefresh = fitbitRefresh;
+    }
 
 }
