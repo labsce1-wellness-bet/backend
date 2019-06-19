@@ -59,7 +59,7 @@ public class UserController {
         URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/userid")
                 .buildAndExpand(newUser.getUserid()).toUri();
         responseHeaders.setLocation(newUserURI);
-        return new ResponseEntity<>(responseHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{userid}")
@@ -83,4 +83,14 @@ public class UserController {
 
     }
 
+    @PutMapping("/{userid}/fitbit")
+    public ResponseEntity<?> addFitbit(@RequestBody User user, @PathVariable long userid) {
+        User newUser = userService.findById(userid);
+
+        newUser.setFitbitAccess(user.getFitbitAccess());
+        newUser.setFitbitRefresh(user.getFitbitRefresh());
+        userService.save(newUser);
+
+        return new ResponseEntity<>("Fitbit added successfully", HttpStatus.OK);
+    }
 }
