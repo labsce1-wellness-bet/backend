@@ -2,12 +2,11 @@ package com.lambdaschool.wellness.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "User")
@@ -31,39 +30,67 @@ public class User {
     @JsonIgnore
     private String password;
 
+    @ManyToMany
+    @JoinTable(name = "user_group_competition",
+            joinColumns = {@JoinColumn(name = "userid")},
+    inverseJoinColumns = {@JoinColumn(name = "groupid")})
+    private Set<Group> group = new HashSet<Group>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "User_group_Comp", joinColumns = @JoinColumn(name = "userid"),
-            inverseJoinColumns = @JoinColumn(name = "groupid") )
-    private List<Group> groups = new ArrayList<>();
+    @ManyToMany
+    @JoinTable(name = "user_group_competition",
+            joinColumns = {@JoinColumn(name = "userid")},
+            inverseJoinColumns = {@JoinColumn(name = "compid")})
+    private Set<Competition> competition = new HashSet<Competition>();
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "User_group_Comp", joinColumns = @JoinColumn(name = "userid"),
-    inverseJoinColumns = @JoinColumn(name = "compid"))
-    private List<Competition> competitions = new ArrayList<>();
+
+
+
 
     public User()
     {
         //default constructor
     }
 
+    public Set<Group> getGroup()
+    {
+        return group;
+    }
+
+    public void setGroup(Set<Group> group)
+    {
+        this.group = group;
+    }
+
+    public Set<Competition> getCompetition()
+    {
+        return competition;
+    }
+
+    public void setCompetition(Set<Competition> competition)
+    {
+        this.competition = competition;
+    }
+
+    public void setFullname(String fullname)
+    {
+        this.fullname = fullname;
+    }
+
+    public String getPassword()
+    {
+        return password;
+    }
+
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+
     public void setUsername(String username)
     {
         this.username = username;
     }
-
-    public List<Group> getGroups()
-    {
-        return groups;
-    }
-
-    public void setGroups(List<Group> groups)
-    {
-        this.groups = groups;
-    }
-
-
 
     public long getUserid() {
         return userid;
@@ -104,5 +131,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
 
 }

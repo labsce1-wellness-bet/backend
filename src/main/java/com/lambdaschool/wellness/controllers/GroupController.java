@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
 
 @RestController
 @RequestMapping(value = "/api/group")
-@CrossOrigin("http:localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
 
 public class GroupController
 {
@@ -39,6 +39,7 @@ public class GroupController
     @PostMapping("")
     public ResponseEntity<?> addNewGroup(@Valid @RequestBody Group newGroup) throws URISyntaxException
     {
+
         newGroup = groupService.save(newGroup);
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/groupid").buildAndExpand(newGroup.getGroupid()).toUri();
@@ -60,6 +61,7 @@ public class GroupController
     public ResponseEntity<?> saveGroup(@RequestBody Group group, @PathVariable long groupid)
     {
         Group newGroup = new Group();
+        //Group newGroup = groupService.findById(groupid);
 
         newGroup.setGroupid(groupid);
         newGroup.setGroup_name(group.getGroup_name());

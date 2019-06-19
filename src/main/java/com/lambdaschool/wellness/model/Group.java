@@ -3,9 +3,7 @@ package com.lambdaschool.wellness.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Entity
 @Table(name = "groups")
@@ -22,8 +20,9 @@ public class Group
     private String admin;
     private String invite_code;
 
-    @ManyToMany(mappedBy = "groups")
-    private List<User> users = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "group")
+    private Set<User> users = new HashSet<User>();
 
     public Group()
     {
@@ -39,12 +38,13 @@ public class Group
 
     }
 
-    public List<User> getUsers()
+
+    public Set<User> getUsers()
     {
         return users;
     }
 
-    public void setUsers(List<User> users)
+    public void setUsers(Set<User> users)
     {
         this.users = users;
     }
@@ -68,6 +68,7 @@ public class Group
     {
         this.group_name = group_name;
     }
+
     public int getGoal()
     {
         return goal;
@@ -101,17 +102,15 @@ public class Group
 
 
         }
-        return builder.toString();
-
-
+    return builder.toString();
 
 
     }
 
-    public void setInvite_code(String invite_code)
-    {
-        this.invite_code = invite_code;
-    }
+        public void setInvite_code(String invite_code)
+        {
+            this.invite_code = invite_code;
+        }
 
 
 }
