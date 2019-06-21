@@ -43,18 +43,18 @@ public class CompetitionController {
         return new ResponseEntity<Competition>(competition, HttpStatus.OK);
     }
 
-    @PostMapping("/{groupid}")
+    @PostMapping("/group/{groupid}")
     public Competition addCompetitionToGroup(@PathVariable(value = "groupid") Long groupid,
             @Valid @RequestBody Competition competition) throws Exception {
-        //verify and decode jwt
+        // verify and decode jwt
         String authHeader = request.getHeader("Authorization").split(" ")[1];
         DecodedJWT decodedJWT = JWTHelper.getDecodedJWT(authHeader);
         Jwk jwk = JWTHelper.getJwk(decodedJWT);
         JWTHelper.verifyDecodedJWT(jwk, decodedJWT);
 
-        //ensuring only the admin can create a competition
+        // ensuring only the admin can create a competition
         Group adminGroup = groupRepo.findByAdminid(decodedJWT.getSubject());
-        if(adminGroup.getAdminid() == decodedJWT.getSubject()) {
+        if (adminGroup.getAdminid() == decodedJWT.getSubject()) {
             return null;
         }
         return groupRepo.findById(groupid).map(group -> {
