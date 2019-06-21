@@ -50,8 +50,9 @@ To get the server running locally:
 | Method | Endpoint                   | Access Control | Description                               |
 | ------ | -------------------------- | -------------- | ----------------------------------------- |
 | GET    | `/api/user/all`            | admin          | Returns list and information on all users |
-| GET    | `/api/user/:userId`        | all users      | Retrieve data of one user by id           |
-| POST   | `/api/user`                | none           | Create new user                           |
+| GET    | `/api/user/:userId`        | all users      | Retrieve data of one user by id           | - in progress |
+| GET    | `/api/user/auth0id`        | personal       | User may retrieve their data only         |
+| POST   | `/api/user`                | personal       | Create new user                           |
 | DELETE | `/api/user/:userid`        | all users      | delete user                               |
 | PUT    | `/api/user/:userid`        | all users      | update user                               |
 | PUT    | `/api/user/:userid/fitbit` | all users      | Add tokens for fitbit                     |
@@ -65,6 +66,12 @@ To get the server running locally:
 | PUT    | `/api/groups/:groupid` | Admin of group |             |
 | DELETE | `/api/groups/:groupid` | Admin of group |             |
 | GET    | `/api/groups/:groupid` | all users      |             |
+
+#### Group Routes
+
+| Method | Endpoint                          | Access Control | Description                  |
+| ------ | --------------------------------- | -------------- | ---------------------------- |
+| POST   | `/api/competition/group/:groupid` | Admin of group | Create Competition for group |
 
 # Data Model
 
