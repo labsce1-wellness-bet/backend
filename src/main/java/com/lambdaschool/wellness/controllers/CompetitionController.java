@@ -1,18 +1,24 @@
 package com.lambdaschool.wellness.controllers;
 
+import com.auth0.jwk.Jwk;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lambdaschool.wellness.model.Competition;
+import com.lambdaschool.wellness.model.Group;
 import com.lambdaschool.wellness.repository.CompetitionRepository;
 import com.lambdaschool.wellness.repository.GroupRepository;
+import com.lambdaschool.wellness.service.Auth0.JWTHelper;
 import com.lambdaschool.wellness.service.CompetitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RequestMapping(value = "/api/competition")
 @RestController
+@SuppressWarnings("Duplicates")
 public class CompetitionController {
     @Autowired
     private CompetitionService competitionService;
@@ -22,6 +28,9 @@ public class CompetitionController {
 
     @Autowired
     private CompetitionRepository competitionRepo;
+
+    @Autowired
+    private HttpServletRequest request;
 
     @GetMapping("/all")
     public Iterable<Competition> getAllComp() {
@@ -48,8 +57,18 @@ public class CompetitionController {
     //
     @PostMapping("/{groupid}")
     public Competition addCompetitionToGroup(@PathVariable(value = "groupid") Long groupid,
-            @Valid @RequestBody Competition competition) {
+            @Valid @RequestBody Competition competition) throws Exception {
+        //verify and decode jwt
+        String authHeader = request.getHeader("Authorization").split(" ")[1];
+        DecodedJWT decodedJWT = JWTHelper.getDecodedJWT(authHeader);
+        Jwk jwk = JWTHelper.getJwk(decodedJWT);
+        JWTHelper.verifyDecodedJWT(jwk, decodedJWT);
 
+        //ensuring only the admin can create a competition
+        Group adminGroup = groupRepo.findByAdminid(decodedJWT.getSubject());
+        if(adminGroup.getAdminid() == decodedJWT.getSubject()) {
+            return null;
+        }
         return groupRepo.findById(groupid).map(group -> {
             competition.setGroup(group);
             return competitionRepo.save(competition);

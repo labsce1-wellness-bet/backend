@@ -8,5 +8,6 @@ public interface GroupRepository extends JpaRepository<Group, Long>
 {
     Group findByGroupid(long groupid);
     Group  findById(long id);
+    Group findByAdminid(String adminid);
 
 }
