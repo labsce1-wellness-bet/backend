@@ -43,18 +43,6 @@ public class CompetitionController {
         return new ResponseEntity<Competition>(competition, HttpStatus.OK);
     }
 
-    // @PostMapping("")
-    // public ResponseEntity<?> addNewComp(@Valid @RequestBody Competition newComp)
-    // throws URISyntaxException
-    // {
-    // newComp = competitionService.save(newComp);
-    // HttpHeaders responseHeaders = new HttpHeaders();
-    // URI newUserURI =
-    // ServletUriComponentsBuilder.fromCurrentRequest().path("/compid").buildAndExpand(newComp.getCompid()).toUri();
-    // responseHeaders.setLocation(newUserURI);
-    // return new ResponseEntity<Object>(newComp, HttpStatus.CREATED);
-    // }
-    //
     @PostMapping("/{groupid}")
     public Competition addCompetitionToGroup(@PathVariable(value = "groupid") Long groupid,
             @Valid @RequestBody Competition competition) throws Exception {
