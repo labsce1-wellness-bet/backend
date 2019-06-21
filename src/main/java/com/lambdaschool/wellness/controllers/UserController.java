@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping(value = "/api/user")
 public class UserController {
     @Autowired
-    private UserRepository groupMemberRepo;
+    private UserRepository userRepo;
 
     @Autowired
     private HttpServletRequest request;
@@ -28,7 +28,7 @@ public class UserController {
         Jwk jwk = JWTHelper.getJwk(decodedJWT);
         JWTHelper.verifyDecodedJWT(jwk, decodedJWT);
 
-        User member = groupMemberRepo.findByAuth0id(decodedJWT.getSubject());
+        User member = userRepo.findByAuth0id(decodedJWT.getSubject());
         return member;
     }
 
