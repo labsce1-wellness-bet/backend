@@ -7,6 +7,7 @@ import com.lambdaschool.wellness.repository.UserRepository;
 import com.lambdaschool.wellness.service.Auth0.JWTHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +22,10 @@ public class UserController {
     @Autowired
     private HttpServletRequest request;
 
+    @GetMapping("/all")
+    private Iterable<User> getAllUsers() {
+        return userRepo.findAll();
+    }
     @GetMapping("/auth0id")
     private User getUserByAuth0Id() throws Exception {
         String authHeader = request.getHeader("Authorization").split(" ")[1];
@@ -30,6 +35,20 @@ public class UserController {
 
         User member = userRepo.findByAuth0id(decodedJWT.getSubject());
         return member;
+    }
+    @PostMapping("")
+    User createUser() throws Exception {
+        String authHeader = request.getHeader("Authorization").split(" ")[1];
+        DecodedJWT decodedJWT = JWTHelper.getDecodedJWT(authHeader);
+        Jwk jwk = JWTHelper.getJwk(decodedJWT);
+        JWTHelper.verifyDecodedJWT(jwk, decodedJWT);
+
+        if(userRepo.existsByAuth0id(decodedJWT.getSubject())) {
+            return null;
+        }
+        User newUser = new User(decodedJWT.getSubject());
+        userRepo.save(newUser);
+        return newUser;
     }
 
 //    @GetMapping("/")
