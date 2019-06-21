@@ -1,10 +1,12 @@
 package com.lambdaschool.wellness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "wellness_groups")
@@ -22,17 +24,25 @@ public class Group
 
     private String adminid;
 
-    @ManyToMany(mappedBy = "group")
-    private Set<User> users = new HashSet<>();
+
+
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(name="user_group",
+            joinColumns = {@JoinColumn(name="groupid")},
+            inverseJoinColumns = {@JoinColumn(name="userid")})
+    private Set<User> users;
 
     public Group() {
 
     }
-    public Group(String group_name, String invite_code, String adminid, Set<User> users) {
+
+    public Group(String group_name, String invite_code, String adminid, User... users) {
         this.group_name = group_name;
         this.invite_code = invite_code;
         this.adminid = adminid;
-        this.users = users;
+        this.users = Stream.of(users).collect(Collectors.toSet());
+        this.users.forEach(x -> x.getGroups().add(this));
     }
 
     public long getGroupid() {
@@ -51,6 +61,14 @@ public class Group
         this.group_name = group_name;
     }
 
+    public String getInvite_code() {
+        return invite_code;
+    }
+
+    public void setInvite_code(String invite_code) {
+        this.invite_code = invite_code;
+    }
+
     public String getAdminid() {
         return adminid;
     }
@@ -66,15 +84,4 @@ public class Group
     public void setUsers(Set<User> users) {
         this.users = users;
     }
-
-    public String getInvite_code() {
-        return invite_code;
-    }
-
-    public void setInvite_code(String invite_code)
-        {
-            this.invite_code = invite_code;
-        }
-
-
 }

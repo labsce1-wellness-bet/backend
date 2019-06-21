@@ -70,12 +70,16 @@ public class GroupController
 
         //we set our starting values
         newGroup.setAdminid(decodedJWT.getSubject());
-        newGroup.setInvite_code(createInviteCode());
         User currentUser = userRepo.findByAuth0id(decodedJWT.getSubject());
-        System.out.println(currentUser);
-        newGroup.getUsers().add(currentUser);
+        System.out.println(newGroup);
         //Save the new group into the database
-        newGroup = groupRepo.save(newGroup);
+
+        newGroup = groupRepo.save(new Group(
+                newGroup.getGroup_name(),
+                createInviteCode(),
+                decodedJWT.getSubject(),
+                currentUser
+        ));
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/groupid").buildAndExpand(newGroup.getGroupid()).toUri();
         responseHeaders.setLocation(newUserURI);

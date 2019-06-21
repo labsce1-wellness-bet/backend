@@ -4,6 +4,7 @@ package com.lambdaschool.wellness.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,18 +16,15 @@ public class User {
     private long userid;
     private String auth0id;
 
-    @ManyToMany
-    @JoinTable(name="user_group",
-    joinColumns = {@JoinColumn(name="userid")},
-    inverseJoinColumns = {@JoinColumn(name="groupid")})
-    private Set<Group> group;
+    @ManyToMany(mappedBy = "users")
+    private Set<Group> groups = new HashSet<>();
+
     public User() {
 
     }
 
-    public User(String auth0id, Set<Group> group) {
+    public User(String auth0id) {
         this.auth0id = auth0id;
-        this.group = group;
     }
 
     public long getUserid() {
@@ -45,11 +43,11 @@ public class User {
         this.auth0id = auth0id;
     }
 
-    public Set<Group> getGroup() {
-        return group;
+    public Set<Group> getGroups() {
+        return groups;
     }
 
-    public void setGroup(Set<Group> group) {
-        this.group = group;
+    public void setGroups(Set<Group> groups) {
+        this.groups = groups;
     }
 }
