@@ -17,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Random;
 
 
@@ -85,7 +86,25 @@ public class GroupController
         responseHeaders.setLocation(newUserURI);
         return new ResponseEntity<>(newGroup,HttpStatus.CREATED);
     }
+    @PutMapping("/join-group/{groupid}")
+    public Group addUserToGroup(@PathVariable Long groupid, @RequestBody HashMap<String, String> data) throws Exception {
+        //verify and decode jwt
+        String authHeader = request.getHeader("Authorization").split(" ")[1];
+        DecodedJWT decodedJWT = JWTHelper.getDecodedJWT(authHeader);
+        Jwk jwk = JWTHelper.getJwk(decodedJWT);
+        JWTHelper.verifyDecodedJWT(jwk, decodedJWT);
+        Group group = groupRepo.findByGroupid(groupid);
 
+        if(group.getInvite_code().equals(data.get("invite_code"))) {
+            User currentUser = userRepo.findByAuth0id(decodedJWT.getSubject());
+            group.getUsers().add(currentUser);
+            group = groupRepo.save(group);
+
+            return group;
+        } else {
+            return null;
+        }
+    }
 
 
     @DeleteMapping("/{groupid}")
