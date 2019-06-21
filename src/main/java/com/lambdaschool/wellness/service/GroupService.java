@@ -17,8 +17,7 @@ public class GroupService
         return groupRepository.findAll();
     }
 
-    public Group findById(Long id){
-
+    public Group findById(Long id) {
         return groupRepository.findByGroupid(id);
     }
 

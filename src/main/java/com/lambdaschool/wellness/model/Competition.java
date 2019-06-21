@@ -3,8 +3,6 @@ package com.lambdaschool.wellness.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Data
@@ -20,23 +18,9 @@ public class Competition
     private String startDate;
     private String endDate;
 
-    @ManyToMany(mappedBy = "competition")
-    private Set<User>  users = new HashSet<>();
-
-
     public Competition()
     {
         //
-    }
-
-    public Set<User> getUsers()
-    {
-        return users;
-    }
-
-    public void setUsers(Set<User> users)
-    {
-        this.users = users;
     }
 
     public String getCompetitionType()
