@@ -1,6 +1,9 @@
 package com.lambdaschool.wellness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -18,9 +21,23 @@ public class Competition
     private String startDate;
     private String endDate;
 
+    @ManyToOne(fetch= FetchType.LAZY, optional = false)
+    @JoinColumn(name = "groupid",  nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Group group;
+
     public Competition()
     {
         //
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     public String getCompetitionType()

@@ -33,6 +33,9 @@ public class Group
             inverseJoinColumns = {@JoinColumn(name="userid")})
     private Set<User> users;
 
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    private Set<Competition> competitions;
+
     public Group() {
 
     }
@@ -43,6 +46,14 @@ public class Group
         this.adminid = adminid;
         this.users = Stream.of(users).collect(Collectors.toSet());
         this.users.forEach(x -> x.getGroups().add(this));
+    }
+
+    public Set<Competition> getCompetitions() {
+        return competitions;
+    }
+
+    public void setCompetitions(Set<Competition> competitions) {
+        this.competitions = competitions;
     }
 
     public long getGroupid() {
