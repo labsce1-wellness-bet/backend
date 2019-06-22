@@ -18,7 +18,7 @@ public class GroupService
     }
 
     public Group findById(Long id) {
-        return groupRepository.findByGroupid(id);
+        return groupRepository.findByGroupId(id);
     }
 
     public Group save(Group newGroup)

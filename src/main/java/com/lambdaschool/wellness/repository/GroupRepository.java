@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GroupRepository extends JpaRepository<Group, Long>
 {
-    Group findByGroupid(long groupid);
-    Group  findById(long id);
-    Group findByAdminid(String adminid);
-
+    Group findByGroupId(long groupId);
+    Group findByAdminId(String adminId);
+    Group findAllByAdminId(String adminId);
+    Group findBySecretCode(String secretCode);
 }

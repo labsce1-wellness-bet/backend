@@ -1,11 +1,8 @@
 package com.lambdaschool.wellness.controllers;
 
-import com.auth0.jwk.Jwk;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lambdaschool.wellness.model.Group;
-import com.lambdaschool.wellness.model.User;
 import com.lambdaschool.wellness.repository.GroupRepository;
-import com.lambdaschool.wellness.repository.UserRepository;
 import com.lambdaschool.wellness.service.Auth0.JWTHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,39 +14,47 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Random;
 
 
 @RestController
 @RequestMapping(value = "/api/group")
-@SuppressWarnings("Duplicates")
 public class GroupController
 {
     @Autowired
     private GroupRepository groupRepo;
 
-    @Autowired
-    private UserRepository userRepo;
 
     @Autowired
     private HttpServletRequest request;
 
     @GetMapping("/all")
-    public Iterable<Group> getAllGroups()
+    public Iterable<Group> getAllGroups() throws Exception
     {
+        JWTHelper.decodeJWTWithVerify(request);
         return groupRepo.findAll();
     }
 
-    @GetMapping("/{groupid}")
-    public ResponseEntity<?> getGroupById(@PathVariable Long groupid)
+    @GetMapping("/id/{groupId}")
+    public ResponseEntity<?> getGroupById(@PathVariable Long groupId) throws Exception
     {
-        Group group = groupRepo.findByGroupid(groupid);
-        return new ResponseEntity<Group>(group, HttpStatus.OK);
+        JWTHelper.decodeJWTWithVerify(request);
+        Group group = groupRepo.findByGroupId(groupId);
+        return new ResponseEntity<>(group, HttpStatus.OK);
+    }
+
+    @GetMapping("/all/admin/id/{adminId}")
+    public Group getGroupsByAdminId(@PathVariable String adminId) throws Exception {
+        DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
+        if(decodedJWT.getSubject() == adminId) {
+            return groupRepo.findAllByAdminId(adminId);
+        } else {
+            return null;
+        }
     }
 
 
-    private String createInviteCode() {
+    private String createSecretCode() {
         int length = 7;
         final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
@@ -63,69 +68,48 @@ public class GroupController
     @PostMapping("")
     public ResponseEntity<?> addNewGroup(@Valid @RequestBody Group newGroup) throws Exception
     {
-        //verify and decode jwt
-        String authHeader = request.getHeader("Authorization").split(" ")[1];
-        DecodedJWT decodedJWT = JWTHelper.getDecodedJWT(authHeader);
-        Jwk jwk = JWTHelper.getJwk(decodedJWT);
-        JWTHelper.verifyDecodedJWT(jwk, decodedJWT);
-
+        DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
         //we set our starting values
-        newGroup.setAdminid(decodedJWT.getSubject());
-        User currentUser = userRepo.findByAuth0id(decodedJWT.getSubject());
-        System.out.println(newGroup);
+        newGroup.setAdminId(decodedJWT.getSubject());
+        newGroup.setSecretCode(createSecretCode());
         //Save the new group into the database
-
-        newGroup = groupRepo.save(new Group(
-                newGroup.getGroup_name(),
-                createInviteCode(),
-                decodedJWT.getSubject(),
-                currentUser
-        ));
+//        newGroup.getUserIds().add(decodedJWT.getSubject());
+        newGroup = groupRepo.save(newGroup);
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/groupid").buildAndExpand(newGroup.getGroupid()).toUri();
+        URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/groupId").buildAndExpand(newGroup.getGroupId()).toUri();
         responseHeaders.setLocation(newUserURI);
         return new ResponseEntity<>(newGroup,HttpStatus.CREATED);
     }
-    @PutMapping("/join-group/{groupid}")
-    public Group addUserToGroup(@PathVariable Long groupid, @RequestBody HashMap<String, String> data) throws Exception {
+    @PutMapping("/join-group/{secretCode}")
+    public Group addUserToGroup(@PathVariable String secretCode) throws Exception {
         //verify and decode jwt
-        String authHeader = request.getHeader("Authorization").split(" ")[1];
-        DecodedJWT decodedJWT = JWTHelper.getDecodedJWT(authHeader);
-        Jwk jwk = JWTHelper.getJwk(decodedJWT);
-        JWTHelper.verifyDecodedJWT(jwk, decodedJWT);
-        Group group = groupRepo.findByGroupid(groupid);
+        DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
 
-        if(group.getInvite_code().equals(data.get("invite_code"))) {
-            User currentUser = userRepo.findByAuth0id(decodedJWT.getSubject());
-            group.getUsers().add(currentUser);
-            group = groupRepo.save(group);
-
-            return group;
-        } else {
-            return null;
-        }
+        Group group = groupRepo.findBySecretCode(secretCode);
+//        group.getUserIds().add(decodedJWT.getSubject());
+        return group;
     }
 
 
-    @DeleteMapping("/{groupid}")
-    public ResponseEntity<?> deleteGroupById(@PathVariable Long groupid)
+    @DeleteMapping("/{groupId}")
+    public ResponseEntity<?> deleteGroupById(@PathVariable Long groupId)
     {
-        Group group = groupRepo.findByGroupid(groupid);
+        Group group = groupRepo.findByGroupId(groupId);
         groupRepo.delete(group);
         return new ResponseEntity<String>("Group deleted successfully!", HttpStatus.OK);
 
     }
 
-    @PutMapping("/{groupid}")
-    public ResponseEntity<?> saveGroup(@RequestBody Group group, @PathVariable long groupid)
+    @PutMapping("/{groupId}")
+    public ResponseEntity<?> updateGroup(@RequestBody Group group, @PathVariable long groupId)
     {
         Group newGroup = new Group();
         //Group newGroup = groupService.findById(groupid);
 
-        newGroup.setGroupid(groupid);
-        newGroup.setGroup_name(group.getGroup_name());
-        newGroup.setAdminid(group.getAdminid());
-        newGroup.setInvite_code(group.getInvite_code());
+        newGroup.setGroupId(groupId);
+        newGroup.setGroupName(group.getGroupName());
+        newGroup.setAdminId(group.getAdminId());
+        newGroup.setSecretCode(group.getSecretCode());
         groupRepo.save(newGroup);
 
         return new ResponseEntity<>(newGroup,HttpStatus.OK);

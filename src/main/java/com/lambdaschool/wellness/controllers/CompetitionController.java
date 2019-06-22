@@ -1,6 +1,5 @@
 package com.lambdaschool.wellness.controllers;
 
-import com.auth0.jwk.Jwk;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lambdaschool.wellness.model.Competition;
 import com.lambdaschool.wellness.model.Group;
@@ -18,7 +17,6 @@ import javax.validation.Valid;
 
 @RequestMapping(value = "/api/competition")
 @RestController
-@SuppressWarnings("Duplicates")
 public class CompetitionController {
     @Autowired
     private CompetitionService competitionService;
@@ -37,24 +35,21 @@ public class CompetitionController {
         return competitionService.findAll();
     }
 
-    @GetMapping("/{compid}")
-    public ResponseEntity<?> getByCompid(@PathVariable Long compid) {
-        Competition competition = competitionService.findById(compid);
-        return new ResponseEntity<Competition>(competition, HttpStatus.OK);
+    @GetMapping("/{compId}")
+    public ResponseEntity<?> getByCompId(@PathVariable Long compId) {
+        Competition competition = competitionService.findById(compId);
+        return new ResponseEntity<>(competition, HttpStatus.OK);
     }
 
-    @PostMapping("/group/{groupid}")
-    public Competition addCompetitionToGroup(@PathVariable(value = "groupid") Long groupid,
+    @PostMapping("/group/{groupId}")
+    public Competition addCompetitionToGroup(@PathVariable(value = "groupId") Long groupid,
             @Valid @RequestBody Competition competition) throws Exception {
-        // verify and decode jwt
-        String authHeader = request.getHeader("Authorization").split(" ")[1];
-        DecodedJWT decodedJWT = JWTHelper.getDecodedJWT(authHeader);
-        Jwk jwk = JWTHelper.getJwk(decodedJWT);
-        JWTHelper.verifyDecodedJWT(jwk, decodedJWT);
+        DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
+
 
         // ensuring only the admin can create a competition
-        Group adminGroup = groupRepo.findByAdminid(decodedJWT.getSubject());
-        if (adminGroup.getAdminid() == decodedJWT.getSubject()) {
+        Group adminGroup = groupRepo.findByAdminId(decodedJWT.getSubject());
+        if (adminGroup.getAdminId() == decodedJWT.getSubject()) {
             return null;
         }
         return groupRepo.findById(groupid).map(group -> {
@@ -63,18 +58,18 @@ public class CompetitionController {
         }).orElseThrow(() -> new RuntimeException());
     }
 
-    @DeleteMapping("/{compid}")
-    public ResponseEntity<?> findById(@PathVariable Long compid) {
-        competitionService.delete(compid);
-        return new ResponseEntity<String>("Competition deleted successfully!", HttpStatus.OK);
+    @DeleteMapping("/{compId}")
+    public ResponseEntity<?> findById(@PathVariable Long compId) {
+        competitionService.delete(compId);
+        return new ResponseEntity<>("Competition deleted successfully!", HttpStatus.OK);
 
     }
 
-    @PutMapping("/{compid}")
-    public ResponseEntity<?> saveComp(@RequestBody Competition competition, @PathVariable long compid) {
+    @PutMapping("/{compId}")
+    public ResponseEntity<?> saveComp(@RequestBody Competition competition, @PathVariable long compId) {
         Competition newComp = new Competition();
 
-        newComp.setCompid(compid);
+        newComp.setCompId(compId);
         newComp.setCompetitionType(competition.getCompetitionType());
         newComp.setMessage(competition.getMessage());
         newComp.setBetAmount(competition.getBetAmount());
