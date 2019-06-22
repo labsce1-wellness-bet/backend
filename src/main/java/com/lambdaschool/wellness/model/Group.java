@@ -28,7 +28,7 @@ public class Group
 
     }
 
-    public Group(String groupName, String inviteCode, String adminId, Set<Competition> competitions) {
+    public Group(String groupName, String secretCode, String adminId, Set<Competition> competitions) {
         this.groupName = groupName;
         this.secretCode = secretCode;
         this.adminId = adminId;
