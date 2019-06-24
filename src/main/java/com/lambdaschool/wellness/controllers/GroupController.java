@@ -159,7 +159,7 @@ public class GroupController
         }
         return null;
     }
-    @PutMapping("/{groupId}")
+    @PutMapping("/id/{groupId}")
     public ResponseEntity<?> updateGroup(@RequestBody Group group, @PathVariable long groupId)
     {
         Group newGroup = new Group();
