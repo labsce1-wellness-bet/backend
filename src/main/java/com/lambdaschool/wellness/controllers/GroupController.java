@@ -130,9 +130,10 @@ public class GroupController
     }
 
 
-    @DeleteMapping("/{groupId}")
+    @DeleteMapping("/id/{groupId}")
     public ResponseEntity<?> deleteGroupById(@PathVariable Long groupId)
     {
+        //TODO: Delete Group by ID, needs jwt protection and admin role on Auth0 - implement after MVP is finished
         Group group = groupRepo.findByGroupId(groupId);
         groupRepo.delete(group);
         return new ResponseEntity<String>("Group deleted successfully!", HttpStatus.OK);
