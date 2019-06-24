@@ -41,7 +41,7 @@ public class CompetitionController {
         return new ResponseEntity<>(competition, HttpStatus.OK);
     }
 
-    @PostMapping("/group/{groupId}")
+    @PostMapping("/group/id/{groupId}")
     public Competition addCompetitionToGroup(@PathVariable(value = "groupId") Long groupid,
             @Valid @RequestBody Competition competition) throws Exception {
         DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
