@@ -1,7 +1,7 @@
 INSERT INTO WELLNESS_GROUPS
   (GROUP_ID, ADMIN_ID, GROUP_NAME, SECRET_CODE)
 VALUES
-  (1, 'auth0|3018490385', 'a', 'aaaa'),
+  (1, 'auth0|3018490382', 'a', 'aaaa'),
   (2, 'auth0|3018490386', 'b', 'bbbb'),
   (3, 'auth0|3018490387', 'c', 'cccc'),
   (4, 'auth0|3018490388', 'd', 'dddd'),
@@ -10,6 +10,11 @@ VALUES
 
 alter sequence hibernate_sequence restart with 10;
 
+INSERT INTO GROUP_AUTH0IDS
+  (GROUP_GROUP_ID, AUTH0IDS)
+VALUES
+  (1, 'auth0|3018490382'),
+  (1, 'auth0|835284824');
 
 INSERT INTO COMPETITIONS
   (COMP_ID, BET_AMOUNT, COMPETITION_TYPE, END_DATE, MESSAGE, START_DATE, GROUP_ID)
