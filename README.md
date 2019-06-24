@@ -47,17 +47,17 @@ To get the server running locally:
 
 #### Group Routes
 
-| Method | Endpoint                             | Access Control     | Description                                |
-| ------ | ------------------------------------ | ------------------ | ------------------------------------------ |
-| GET    | `/api/group/all`                     | Wellness Bet Admin | Get all groups                             |
-| GET    | `/api/group/id/:groupId`             | Anyone with JWT    | Gets group by id                           |
-| GET    | `/id/{groupId}/public/all/user-info` | Users in groups    | Gets all users' public info in group       |
-| GET    | `/all/admin`                         | Admin of group     | Gets all groups that belongs to that admin |
-| POST   | `/api/group`                         | Anyone with JWT    | Creates group                              |
-| PUT    | `/api/group/join-group/:secretCode`  | Anyone with JWT    | Lets user join group                       |
-| PUT    | `/api/group/id/:groupId`             | Anyone             | Update group by id                         |
-| DELETE | `/api/group/id/:groupId`             | Wellness Bet Admin | Delete group by id                         |
-| DELETE | `/api/group/id/:groupId/admin`       | Admin of group     | Delete group by id                         |
+| Method | Endpoint                                       | Access Control     | Description                                |
+| ------ | ---------------------------------------------- | ------------------ | ------------------------------------------ |
+| GET    | `/api/group/all`                               | Wellness Bet Admin | Get all groups                             |
+| GET    | `/api/group/id/:groupId`                       | Anyone with JWT    | Gets group by id                           |
+| GET    | `/api/group/id/{groupId}/public/all/user-info` | Users in groups    | Gets all users' public info in group       |
+| GET    | `/api/group/all/admin`                         | Admin of group     | Gets all groups that belongs to that admin |
+| POST   | `/api/group`                                   | Anyone with JWT    | Creates group                              |
+| PUT    | `/api/group/join-group/:secretCode`            | Anyone with JWT    | Lets user join group                       |
+| PUT    | `/api/group/id/:groupId`                       | Anyone             | Update group by id                         |
+| DELETE | `/api/group/id/:groupId`                       | Wellness Bet Admin | Delete group by id                         |
+| DELETE | `/api/group/id/:groupId/admin`                 | Admin of group     | Delete group by id                         |
 
 #### Competition Routes
 
@@ -66,8 +66,8 @@ To get the server running locally:
 | GET    | `/api/competition/all`         | Anyone         | Get all competitions from all groups     |
 | GET    | `/api/competition/id/:compId`  | Anyone         | Get compeitition by id                   |
 | POST   | `/api/competition/id/:groupId` | Admin of Group | Create competition for group by group id |
-| PUT    | `/api/id/:compId`              | Anyone         | Update competition by id                 |
-| DELETE | `/api/id/:compId`              | Anyone         | Delete competition by id                 |
+| PUT    | `/api/competition/id/:compId`  | Anyone         | Update competition by id                 |
+| DELETE | `/api/competition/id/:compId`  | Anyone         | Delete competition by id                 |
 
 # Data Model
 
