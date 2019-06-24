@@ -4,6 +4,10 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lambdaschool.wellness.model.Group;
 import com.lambdaschool.wellness.repository.GroupRepository;
 import com.lambdaschool.wellness.service.Auth0.JWTHelper;
+import kong.unirest.HttpResponse;
+import kong.unirest.JacksonObjectMapper;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,7 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Random;
+import java.util.*;
 
 
 @RestController
