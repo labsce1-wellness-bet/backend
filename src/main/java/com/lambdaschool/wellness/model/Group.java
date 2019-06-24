@@ -1,5 +1,6 @@
 package com.lambdaschool.wellness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,6 +22,10 @@ public class Group
 
     private String adminId;
 
+    @ElementCollection
+    private Set<String> auth0Ids;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private Set<Competition> competitions;
 
@@ -28,11 +33,20 @@ public class Group
 
     }
 
-    public Group(String groupName, String secretCode, String adminId, Set<Competition> competitions) {
+    public Group(String groupName, String secretCode, String adminId, Set<String> auth0Ids, Set<Competition> competitions) {
         this.groupName = groupName;
         this.secretCode = secretCode;
         this.adminId = adminId;
+        this.auth0Ids = auth0Ids;
         this.competitions = competitions;
+    }
+
+    public Set<String> getAuth0Ids() {
+        return auth0Ids;
+    }
+
+    public void setAuth0Ids(Set<String> auth0Ids) {
+        this.auth0Ids = auth0Ids;
     }
 
     public long getGroupId() {
