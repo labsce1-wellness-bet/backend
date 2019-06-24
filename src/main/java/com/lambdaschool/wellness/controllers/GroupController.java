@@ -123,7 +123,9 @@ public class GroupController
         DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
 
         Group group = groupRepo.findBySecretCode(secretCode);
-//        group.getUserIds().add(decodedJWT.getSubject());
+
+        group.getAuth0Ids().add(decodedJWT.getSubject());
+        group = groupRepo.save(group);
         return group;
     }
 
