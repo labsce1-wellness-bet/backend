@@ -143,7 +143,21 @@ public class GroupController
         return new ResponseEntity<String>("Group deleted successfully!", HttpStatus.OK);
 
     }
+    @DeleteMapping("/id/{groupId}/admin")
+    public String deleteGroupAsGroupAdmin(@PathVariable Long groupId) throws Exception
+    {
+        DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
+        String auth0Id = decodedJWT.getSubject();
 
+        Group group = groupRepo.findByGroupId(groupId);
+
+        if(auth0Id.equals(group.getAdminId())) {
+            String groupName = group.getGroupName();
+            groupRepo.delete(group);
+            return groupName;
+        }
+        return null;
+    }
     @PutMapping("/{groupId}")
     public ResponseEntity<?> updateGroup(@RequestBody Group group, @PathVariable long groupId)
     {
