@@ -36,6 +36,7 @@ public class GroupController
     public Iterable<Group> getAllGroups() throws Exception
     {
         JWTHelper.decodeJWTWithVerify(request);
+        //TODO: Only Admin role can request all groups - implement once we reach MVP
         return groupRepo.findAll();
     }
 
