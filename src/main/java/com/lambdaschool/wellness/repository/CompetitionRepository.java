@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CompetitionRepository extends JpaRepository<Competition, Long>
 {
-    Competition findCompetitionByCompid(Long compid);
+    Competition findCompetitionByCompId(Long compId);
 }

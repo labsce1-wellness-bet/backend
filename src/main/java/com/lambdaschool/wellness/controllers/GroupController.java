@@ -1,12 +1,13 @@
 package com.lambdaschool.wellness.controllers;
 
-import com.auth0.jwk.Jwk;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lambdaschool.wellness.model.Group;
-import com.lambdaschool.wellness.model.User;
 import com.lambdaschool.wellness.repository.GroupRepository;
-import com.lambdaschool.wellness.repository.UserRepository;
 import com.lambdaschool.wellness.service.Auth0.JWTHelper;
+import kong.unirest.HttpResponse;
+import kong.unirest.JacksonObjectMapper;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,39 +18,82 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 
 @RestController
 @RequestMapping(value = "/api/group")
-@SuppressWarnings("Duplicates")
 public class GroupController
 {
     @Autowired
     private GroupRepository groupRepo;
 
-    @Autowired
-    private UserRepository userRepo;
 
     @Autowired
     private HttpServletRequest request;
 
     @GetMapping("/all")
-    public Iterable<Group> getAllGroups()
+    public Iterable<Group> getAllGroups() throws Exception
     {
+        JWTHelper.decodeJWTWithVerify(request);
+        //TODO: Only Admin role can request all groups - implement once we reach MVP
         return groupRepo.findAll();
     }
 
-    @GetMapping("/{groupid}")
-    public ResponseEntity<?> getGroupById(@PathVariable Long groupid)
+    @GetMapping("/id/{groupId}")
+    public ResponseEntity<?> getGroupById(@PathVariable Long groupId) throws Exception
     {
-        Group group = groupRepo.findByGroupid(groupid);
-        return new ResponseEntity<Group>(group, HttpStatus.OK);
+        JWTHelper.decodeJWTWithVerify(request);
+        Group group = groupRepo.findByGroupId(groupId);
+        return new ResponseEntity<>(group, HttpStatus.OK);
+    }
+    @GetMapping("/id/{groupId}/public/all/user-info")
+    public ResponseEntity<?> getAllPublicUserInfoByGroupId(@PathVariable Long groupId) {
+
+        Group group = groupRepo.findByGroupId(groupId);
+
+        String idsArr[] = new String[group.getAuth0Ids().size()];
+        idsArr = group.getAuth0Ids().toArray(idsArr);
+        //TODO: Create a method to create links easier for our Auth0 Management API
+        String findUsersByIdQuery = "user_id:(";
+        for(int i = 0; i < idsArr.length; i++) {
+            String id = idsArr[i];
+            findUsersByIdQuery = findUsersByIdQuery.concat("\"" + id + "\"");
+            if (i != idsArr.length - 1) {
+                findUsersByIdQuery = findUsersByIdQuery.concat(" OR ");
+            }
+            if (i == idsArr.length - 1) {
+                findUsersByIdQuery = findUsersByIdQuery.concat(")");
+            }
+        }
+        //TODO: Have to figure out how where to place Unirest config property, since its a configuration for every file
+        Unirest.config().setObjectMapper(new JacksonObjectMapper());
+        Map<String, String> headers = new HashMap<>();
+        //Need AUTH0_MANAGEMENT_TOKEN to work with the Auth0 Management API
+        headers.put("Authorization", "Bearer " + System.getenv("AUTH0_MANAGEMENT_TOKEN"));
+
+        //Specify what I want from the user and find them by their ids
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("fields", "user_metadata,email");
+        queryParams.put("q", findUsersByIdQuery);
+
+        HttpResponse<JsonNode> jsonResponse = Unirest
+                .get("https://akshay-gadkari.auth0.com/api/v2/users")
+                .headers(headers)
+                .queryString(queryParams)
+                .asJson();
+
+        return new ResponseEntity<>(jsonResponse.getBody().toString(), HttpStatus.OK);
     }
 
+    @GetMapping("/all/admin")
+    public Group getGroupsByAdminId() throws Exception {
+        DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
+        return groupRepo.findAllByAdminId(decodedJWT.getSubject());
+        }
 
-    private String createInviteCode() {
+
+    private String createSecretCode() {
         int length = 7;
         final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();
@@ -63,69 +107,68 @@ public class GroupController
     @PostMapping("")
     public ResponseEntity<?> addNewGroup(@Valid @RequestBody Group newGroup) throws Exception
     {
-        //verify and decode jwt
-        String authHeader = request.getHeader("Authorization").split(" ")[1];
-        DecodedJWT decodedJWT = JWTHelper.getDecodedJWT(authHeader);
-        Jwk jwk = JWTHelper.getJwk(decodedJWT);
-        JWTHelper.verifyDecodedJWT(jwk, decodedJWT);
-
+        DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
         //we set our starting values
-        newGroup.setAdminid(decodedJWT.getSubject());
-        User currentUser = userRepo.findByAuth0id(decodedJWT.getSubject());
-        System.out.println(newGroup);
+        newGroup.setAdminId(decodedJWT.getSubject());
+        newGroup.setSecretCode(createSecretCode());
+        Set<String> newSet = new HashSet<>();
+        newSet.add(decodedJWT.getSubject());
+        newGroup.setAuth0Ids(newSet);
         //Save the new group into the database
-
-        newGroup = groupRepo.save(new Group(
-                newGroup.getGroup_name(),
-                createInviteCode(),
-                decodedJWT.getSubject(),
-                currentUser
-        ));
+        newGroup.getAuth0Ids().add(decodedJWT.getSubject());
+        newGroup = groupRepo.save(newGroup);
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/groupid").buildAndExpand(newGroup.getGroupid()).toUri();
+        URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/groupId").buildAndExpand(newGroup.getGroupId()).toUri();
         responseHeaders.setLocation(newUserURI);
         return new ResponseEntity<>(newGroup,HttpStatus.CREATED);
     }
-    @PutMapping("/join-group/{groupid}")
-    public Group addUserToGroup(@PathVariable Long groupid, @RequestBody HashMap<String, String> data) throws Exception {
+    @PutMapping("/join-group/{secretCode}")
+    public Group addUserToGroup(@PathVariable String secretCode) throws Exception {
         //verify and decode jwt
-        String authHeader = request.getHeader("Authorization").split(" ")[1];
-        DecodedJWT decodedJWT = JWTHelper.getDecodedJWT(authHeader);
-        Jwk jwk = JWTHelper.getJwk(decodedJWT);
-        JWTHelper.verifyDecodedJWT(jwk, decodedJWT);
-        Group group = groupRepo.findByGroupid(groupid);
+        DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
 
-        if(group.getInvite_code().equals(data.get("invite_code"))) {
-            User currentUser = userRepo.findByAuth0id(decodedJWT.getSubject());
-            group.getUsers().add(currentUser);
-            group = groupRepo.save(group);
+        Group group = groupRepo.findBySecretCode(secretCode);
 
-            return group;
-        } else {
-            return null;
-        }
+        group.getAuth0Ids().add(decodedJWT.getSubject());
+        group = groupRepo.save(group);
+        return group;
     }
 
 
-    @DeleteMapping("/{groupid}")
-    public ResponseEntity<?> deleteGroupById(@PathVariable Long groupid)
+    @DeleteMapping("/id/{groupId}")
+    public ResponseEntity<?> deleteGroupById(@PathVariable Long groupId)
     {
-        Group group = groupRepo.findByGroupid(groupid);
+        //TODO: Delete Group by ID, needs jwt protection and admin role on Auth0 - implement after MVP is finished
+        Group group = groupRepo.findByGroupId(groupId);
         groupRepo.delete(group);
         return new ResponseEntity<String>("Group deleted successfully!", HttpStatus.OK);
 
     }
+    @DeleteMapping("/id/{groupId}/admin")
+    public String deleteGroupAsGroupAdmin(@PathVariable Long groupId) throws Exception
+    {
+        DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
+        String auth0Id = decodedJWT.getSubject();
 
-    @PutMapping("/{groupid}")
-    public ResponseEntity<?> saveGroup(@RequestBody Group group, @PathVariable long groupid)
+        Group group = groupRepo.findByGroupId(groupId);
+
+        if(auth0Id.equals(group.getAdminId())) {
+            String groupName = group.getGroupName();
+            groupRepo.delete(group);
+            return groupName;
+        }
+        return null;
+    }
+    @PutMapping("/id/{groupId}")
+    public ResponseEntity<?> updateGroup(@RequestBody Group group, @PathVariable long groupId)
     {
         Group newGroup = new Group();
         //Group newGroup = groupService.findById(groupid);
 
-        newGroup.setGroupid(groupid);
-        newGroup.setGroup_name(group.getGroup_name());
-        newGroup.setAdminid(group.getAdminid());
-        newGroup.setInvite_code(group.getInvite_code());
+        newGroup.setGroupId(groupId);
+        newGroup.setGroupName(group.getGroupName());
+        newGroup.setAdminId(group.getAdminId());
+        newGroup.setSecretCode(group.getSecretCode());
         groupRepo.save(newGroup);
 
         return new ResponseEntity<>(newGroup,HttpStatus.OK);

@@ -45,71 +45,33 @@ To get the server running locally:
 
 🚫This is a placeholder, replace the endpoints, access controll, and descriptioin to match your project
 
-#### User Routes
-
-| Method | Endpoint                   | Access Control | Description                               |
-| ------ | -------------------------- | -------------- | ----------------------------------------- |
-| GET    | `/api/user/all`            | admin          | Returns list and information on all users |
-| GET    | `/api/user/:userId`        | all users      | Retrieve data of one user by id           | - in progress |
-| GET    | `/api/user/auth0id`        | personal       | User may retrieve their data only         |
-| POST   | `/api/user`                | personal       | Create new user                           |
-| DELETE | `/api/user/:userid`        | all users      | delete user                               |
-| PUT    | `/api/user/:userid`        | all users      | update user                               |
-| PUT    | `/api/user/:userid/fitbit` | all users      | Add tokens for fitbit                     |
-
 #### Group Routes
 
-| Method | Endpoint               | Access Control | Description |
-| ------ | ---------------------- | -------------- | ----------- |
-| GET    | `/api/groups/all`      | all users      |             |
-| POST   | `/api/groups`          | Admin of group |             |
-| PUT    | `/api/groups/:groupid` | Admin of group |             |
-| DELETE | `/api/groups/:groupid` | Admin of group |             |
-| GET    | `/api/groups/:groupid` | all users      |             |
+| Method | Endpoint                                       | Access Control     | Description                                |
+| ------ | ---------------------------------------------- | ------------------ | ------------------------------------------ |
+| GET    | `/api/group/all`                               | Wellness Bet Admin | Get all groups                             |
+| GET    | `/api/group/id/:groupId`                       | Anyone with JWT    | Gets group by id                           |
+| GET    | `/api/group/id/{groupId}/public/all/user-info` | Users in groups    | Gets all users' public info in group       |
+| GET    | `/api/group/all/admin`                         | Admin of group     | Gets all groups that belongs to that admin |
+| POST   | `/api/group`                                   | Anyone with JWT    | Creates group                              |
+| PUT    | `/api/group/join-group/:secretCode`            | Anyone with JWT    | Lets user join group                       |
+| PUT    | `/api/group/id/:groupId`                       | Anyone             | Update group by id                         |
+| DELETE | `/api/group/id/:groupId`                       | Wellness Bet Admin | Delete group by id                         |
+| DELETE | `/api/group/id/:groupId/admin`                 | Admin of group     | Delete group by id                         |
 
-#### Group Routes
+#### Competition Routes
 
-| Method | Endpoint                          | Access Control | Description                  |
-| ------ | --------------------------------- | -------------- | ---------------------------- |
-| POST   | `/api/competition/group/:groupid` | Admin of group | Create Competition for group |
+| Method | Endpoint                       | Access Control | Description                              |
+| ------ | ------------------------------ | -------------- | ---------------------------------------- |
+| GET    | `/api/competition/all`         | Anyone         | Get all competitions from all groups     |
+| GET    | `/api/competition/id/:compId`  | Anyone         | Get compeitition by id                   |
+| POST   | `/api/competition/id/:groupId` | Admin of Group | Create competition for group by group id |
+| PUT    | `/api/competition/id/:compId`  | Anyone         | Update competition by id                 |
+| DELETE | `/api/competition/id/:compId`  | Anyone         | Delete competition by id                 |
 
 # Data Model
 
-🚫This is just an example. Replace this with your data model
-
-#### USERS
-
----
-
-```
-{
-  id: UUID
-  fname: STRING
-  lname: STRING
-  fullname: STRING
-  email: STRING
-}
-```
-
-#### GROUPS
-
----
-
-```
-{
-  id: UUID
-  name: STRING
-  message:STRING
-  activity:STRING
-  goal: INT
-  admin: STRING
-  bet_amount: INT
-  invite_code: STRING
-  start_date: STRING
-  end_date: STRING
-
-}
-```
+[Data models design](https://dbdiagram.io/d/5d0fef6837c1673299daff7a)
 
 ## 2️⃣ Actions
 
