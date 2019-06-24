@@ -32,40 +32,43 @@ public class CompetitionController {
 
     @GetMapping("/all")
     public Iterable<Competition> getAllComp() {
+        //TODO: Only Admin role can request all competitions - implement once we reach MVP
         return competitionService.findAll();
     }
 
-    @GetMapping("/{compId}")
+    @GetMapping("/id/{compId}")
     public ResponseEntity<?> getByCompId(@PathVariable Long compId) {
+        //TODO: Only people with JWT can access the competition and must belong to group - implement once we reach MVP
+        // if admin of group declines them from entering competition, the user is not allowed to GET competition
         Competition competition = competitionService.findById(compId);
         return new ResponseEntity<>(competition, HttpStatus.OK);
     }
 
     @PostMapping("/group/id/{groupId}")
-    public Competition addCompetitionToGroup(@PathVariable(value = "groupId") Long groupid,
+    public Competition addCompetitionToGroup(@PathVariable(value = "groupId") Long groupId,
             @Valid @RequestBody Competition competition) throws Exception {
         DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
 
 
-        // ensuring only the admin can create a competition
+        // ensuring only the admin of group can create a competition
         Group adminGroup = groupRepo.findByAdminId(decodedJWT.getSubject());
         if (adminGroup.getAdminId() == decodedJWT.getSubject()) {
             return null;
         }
-        return groupRepo.findById(groupid).map(group -> {
+        return groupRepo.findById(groupId).map(group -> {
             competition.setGroup(group);
             return competitionRepo.save(competition);
         }).orElseThrow(() -> new RuntimeException());
     }
 
-    @DeleteMapping("/{compId}")
+    @DeleteMapping("/id/{compId}")
     public ResponseEntity<?> findById(@PathVariable Long compId) {
         competitionService.delete(compId);
         return new ResponseEntity<>("Competition deleted successfully!", HttpStatus.OK);
 
     }
 
-    @PutMapping("/{compId}")
+    @PutMapping("/id/{compId}")
     public ResponseEntity<?> saveComp(@RequestBody Competition competition, @PathVariable long compId) {
         Competition newComp = new Competition();
 
