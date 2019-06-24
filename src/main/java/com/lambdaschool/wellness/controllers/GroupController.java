@@ -42,16 +42,50 @@ public class GroupController
         Group group = groupRepo.findByGroupId(groupId);
         return new ResponseEntity<>(group, HttpStatus.OK);
     }
+    @GetMapping("/id/{groupId}/public/all/user-info")
+    public ResponseEntity<?> getAllPublicUserInfoByGroupId(@PathVariable Long groupId) {
 
-    @GetMapping("/all/admin/id/{adminId}")
-    public Group getGroupsByAdminId(@PathVariable String adminId) throws Exception {
-        DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
-        if(decodedJWT.getSubject() == adminId) {
-            return groupRepo.findAllByAdminId(adminId);
-        } else {
-            return null;
+        Group group = groupRepo.findByGroupId(groupId);
+
+        String idsArr[] = new String[group.getAuth0Ids().size()];
+        idsArr = group.getAuth0Ids().toArray(idsArr);
+        //TODO: Create a method to create links easier for our Auth0 Management API
+        String findUsersByIdQuery = "user_id:(";
+        for(int i = 0; i < idsArr.length; i++) {
+            String id = idsArr[i];
+            findUsersByIdQuery = findUsersByIdQuery.concat("\"" + id + "\"");
+            if (i != idsArr.length - 1) {
+                findUsersByIdQuery = findUsersByIdQuery.concat(" OR ");
+            }
+            if (i == idsArr.length - 1) {
+                findUsersByIdQuery = findUsersByIdQuery.concat(")");
+            }
         }
+        //TODO: Have to figure out how where to place Unirest config property, since its a configuration for every file
+        Unirest.config().setObjectMapper(new JacksonObjectMapper());
+        Map<String, String> headers = new HashMap<>();
+        //Need AUTH0_MANAGEMENT_TOKEN to work with the Auth0 Management API
+        headers.put("Authorization", "Bearer " + System.getenv("AUTH0_MANAGEMENT_TOKEN"));
+
+        //Specify what I want from the user and find them by their ids
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("fields", "user_metadata,email");
+        queryParams.put("q", findUsersByIdQuery);
+
+        HttpResponse<JsonNode> jsonResponse = Unirest
+                .get("https://akshay-gadkari.auth0.com/api/v2/users")
+                .headers(headers)
+                .queryString(queryParams)
+                .asJson();
+
+        return new ResponseEntity<>(jsonResponse.getBody().toString(), HttpStatus.OK);
     }
+
+    @GetMapping("/all/admin")
+    public Group getGroupsByAdminId() throws Exception {
+        DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
+        return groupRepo.findAllByAdminId(decodedJWT.getSubject());
+        }
 
 
     private String createSecretCode() {
