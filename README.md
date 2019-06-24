@@ -59,47 +59,19 @@ To get the server running locally:
 | DELETE | `/api/group/id/:groupId`             | Wellness Bet Admin | Delete group by id                         |
 | DELETE | `/api/group/id/:groupId/admin`       | Admin of group     | Delete group by id                         |
 
-| Method | Endpoint                          | Access Control | Description                  |
-| ------ | --------------------------------- | -------------- | ---------------------------- |
-| POST   | `/api/competition/group/:groupid` | Admin of group | Create Competition for group |
+#### Competition Routes
+
+| Method | Endpoint                       | Access Control | Description                              |
+| ------ | ------------------------------ | -------------- | ---------------------------------------- |
+| GET    | `/api/competition/all`         | Anyone         | Get all competitions from all groups     |
+| GET    | `/api/competition/id/:compId`  | Anyone         | Get compeitition by id                   |
+| POST   | `/api/competition/id/:groupId` | Admin of Group | Create competition for group by group id |
+| PUT    | `/api/id/:compId`              | Anyone         | Update competition by id                 |
+| DELETE | `/api/id/:compId`              | Anyone         | Delete competition by id                 |
 
 # Data Model
 
-🚫This is just an example. Replace this with your data model
-
-#### USERS
-
----
-
-```
-{
-  id: UUID
-  fname: STRING
-  lname: STRING
-  fullname: STRING
-  email: STRING
-}
-```
-
-#### GROUPS
-
----
-
-```
-{
-  id: UUID
-  name: STRING
-  message:STRING
-  activity:STRING
-  goal: INT
-  admin: STRING
-  bet_amount: INT
-  invite_code: STRING
-  start_date: STRING
-  end_date: STRING
-
-}
-```
+[Data models design](https://dbdiagram.io/d/5d0fef6837c1673299daff7a)
 
 ## 2️⃣ Actions
 
