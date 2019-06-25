@@ -1,6 +1,7 @@
 package com.lambdaschool.wellness.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lambdaschool.wellness.lib.enums.CompetitionStatus;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -21,6 +22,9 @@ public class Competition
     private String message;
     private Date startDate;
     private Date endDate;
+    private String winnerId;
+    private CompetitionStatus competitionStatus;
+
 
     @ManyToOne(fetch= FetchType.LAZY, optional = false)
     @JoinColumn(name = "groupId",  nullable = false)
@@ -33,13 +37,32 @@ public class Competition
         //
     }
 
-    public Competition(String competitionType, double betAmount, String message, Date startDate, Date endDate, Group group) {
+
+    public Competition(String competitionType, double betAmount, String message, Date startDate, Date endDate, String winnerId, CompetitionStatus competitionStatus, Group group) {
         this.competitionType = competitionType;
         this.betAmount = betAmount;
         this.message = message;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.winnerId = winnerId;
+        this.competitionStatus = competitionStatus;
         this.group = group;
+    }
+
+    public CompetitionStatus getCompetitionStatus() {
+        return competitionStatus;
+    }
+
+    public void setCompetitionStatus(CompetitionStatus competitionStatus) {
+        this.competitionStatus = competitionStatus;
+    }
+
+    public String getWinnerId() {
+        return winnerId;
+    }
+
+    public void setWinnerId(String winnerId) {
+        this.winnerId = winnerId;
     }
 
     public long getCompId() {
