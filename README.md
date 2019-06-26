@@ -69,6 +69,14 @@ To get the server running locally:
 | PUT    | `/api/competition/id/:compId`  | Anyone         | Update competition by id                 |
 | DELETE | `/api/competition/id/:compId`  | Anyone         | Delete competition by id                 |
 
+#### Competitor Routes
+
+| Method | Endpoint                                        | Access Control  | Description                                           |
+| ------ | ----------------------------------------------- | --------------- | ----------------------------------------------------- |
+| GET    | `/api/competitor/all`                           | Anyone          | Get all competitors from all competitions             |
+| GET    | `/api/competitor/id`                            | Anyone          | Get competitor by id                                  |
+| POST   | `/api/competitor/competition/id/:competitionId` | Anyone with JWT | Create competitor and connect it to competition by id |
+
 # Data Model
 
 [Data models design](https://dbdiagram.io/d/5d0fef6837c1673299daff7a)
