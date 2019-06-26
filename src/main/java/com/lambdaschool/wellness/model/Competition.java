@@ -35,6 +35,7 @@ public class Competition
     @JsonIgnore
     private Group group;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL)
     private Set<Competitor> competitors;
 
