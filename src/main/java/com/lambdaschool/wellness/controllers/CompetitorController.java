@@ -39,7 +39,7 @@ public class CompetitorController {
         return new ResponseEntity<>(competitorRepo.findById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/create-competitor/competition/id/{compId}")
+    @PostMapping("/competition/id/{compId}")
     public ResponseEntity<?> addCompetitorToCompetition(@PathVariable long compId) throws Exception {
         DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
         //Create and set starting values for competitor
