@@ -25,3 +25,7 @@ VALUES
   (4, 1, 'Sleep', CURRENT_DATE(), 'Another Group 2 competition', CURRENT_DATE(), 2, 1, 'auth0|3018490382'),
   (5, 1, 'Sleep', CURRENT_DATE(), 'We are on fire!', CURRENT_DATE(), 2, 2, 'auth0|3018490382');
 
+INSERT INTO COMPETITORS
+  (ID, COMP_ID, AUTH0ID, IS_APPROVED, HAS_UPLOADED_RECEIPT)
+VALUES
+  (1, 1, 'auth0|3018490382', true, true );
