@@ -53,6 +53,7 @@ To get the server running locally:
 | GET    | `/api/group/id/:groupId`                       | Anyone with JWT    | Gets group by id                           |
 | GET    | `/api/group/id/{groupId}/public/all/user-info` | Users in groups    | Gets all users' public info in group       |
 | GET    | `/api/group/all/admin`                         | Admin of group     | Gets all groups that belongs to that admin |
+| GET    | `/api/group/all/auth0id`                       | Anyone with JWT    | Gets all groups that belongs to the user   |
 | POST   | `/api/group`                                   | Anyone with JWT    | Creates group                              |
 | PUT    | `/api/group/join-group/:secretCode`            | Anyone with JWT    | Lets user join group                       |
 | PUT    | `/api/group/id/:groupId`                       | Anyone             | Update group by id                         |
@@ -68,6 +69,14 @@ To get the server running locally:
 | POST   | `/api/competition/id/:groupId` | Admin of Group | Create competition for group by group id |
 | PUT    | `/api/competition/id/:compId`  | Anyone         | Update competition by id                 |
 | DELETE | `/api/competition/id/:compId`  | Anyone         | Delete competition by id                 |
+
+#### Competitor Routes
+
+| Method | Endpoint                                        | Access Control  | Description                                           |
+| ------ | ----------------------------------------------- | --------------- | ----------------------------------------------------- |
+| GET    | `/api/competitor/all`                           | Anyone          | Get all competitors from all competitions             |
+| GET    | `/api/competitor/id`                            | Anyone          | Get competitor by id                                  |
+| POST   | `/api/competitor/competition/id/:competitionId` | Anyone with JWT | Create competitor and connect it to competition by id |
 
 # Data Model
 

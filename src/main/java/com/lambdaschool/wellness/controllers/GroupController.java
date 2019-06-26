@@ -39,6 +39,13 @@ public class GroupController
         //TODO: Only Admin role can request all groups - implement once we reach MVP
         return groupRepo.findAll();
     }
+    @GetMapping("/all/auth0id")
+    public ResponseEntity<?> getGroupsByAuth0Id() throws Exception {
+           DecodedJWT decodedJWT = JWTHelper.decodeJWTWithVerify(request);
+           List<Group> groups = groupRepo.findByAuth0Ids(decodedJWT.getSubject());
+
+           return new ResponseEntity<>(groups, HttpStatus.OK);
+    }
 
     @GetMapping("/id/{groupId}")
     public ResponseEntity<?> getGroupById(@PathVariable Long groupId) throws Exception
