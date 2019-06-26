@@ -8,6 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Data
@@ -32,13 +33,16 @@ public class Competition
     @JsonIgnore
     private Group group;
 
+    @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL)
+    private Set<Competitor> competitors;
+
     public Competition()
     {
         //
     }
 
 
-    public Competition(String competitionType, double betAmount, String message, Date startDate, Date endDate, String winnerId, CompetitionStatus competitionStatus, Group group) {
+    public Competition(String competitionType, double betAmount, String message, Date startDate, Date endDate, String winnerId, CompetitionStatus competitionStatus, Group group, Set<Competitor> competitors) {
         this.competitionType = competitionType;
         this.betAmount = betAmount;
         this.message = message;
@@ -47,6 +51,15 @@ public class Competition
         this.winnerId = winnerId;
         this.competitionStatus = competitionStatus;
         this.group = group;
+        this.competitors = competitors;
+    }
+
+    public Set<Competitor> getCompetitors() {
+        return competitors;
+    }
+
+    public void setCompetitors(Set<Competitor> competitors) {
+        this.competitors = competitors;
     }
 
     public CompetitionStatus getCompetitionStatus() {
