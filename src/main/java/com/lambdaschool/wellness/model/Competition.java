@@ -24,6 +24,8 @@ public class Competition
     private Date startDate;
     private Date endDate;
     private String winnerId;
+    private double totalPot;
+
     private CompetitionStatus competitionStatus;
 
 
@@ -42,16 +44,26 @@ public class Competition
     }
 
 
-    public Competition(String competitionType, double betAmount, String message, Date startDate, Date endDate, String winnerId, CompetitionStatus competitionStatus, Group group, Set<Competitor> competitors) {
+    public Competition(String competitionType, double betAmount, String message, Date startDate, Date endDate, String winnerId, double totalPot, CompetitionStatus competitionStatus, Group group, Set<Competitor> competitors) {
         this.competitionType = competitionType;
         this.betAmount = betAmount;
         this.message = message;
         this.startDate = startDate;
         this.endDate = endDate;
         this.winnerId = winnerId;
+        this.totalPot = totalPot;
         this.competitionStatus = competitionStatus;
         this.group = group;
         this.competitors = competitors;
+    }
+
+
+    public double getTotalPot() {
+        return totalPot;
+    }
+
+    public void setTotalPot(double totalPot) {
+        this.totalPot = totalPot;
     }
 
     public Set<Competitor> getCompetitors() {
