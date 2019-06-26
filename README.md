@@ -53,6 +53,7 @@ To get the server running locally:
 | GET    | `/api/group/id/:groupId`                       | Anyone with JWT    | Gets group by id                           |
 | GET    | `/api/group/id/{groupId}/public/all/user-info` | Users in groups    | Gets all users' public info in group       |
 | GET    | `/api/group/all/admin`                         | Admin of group     | Gets all groups that belongs to that admin |
+| GET    | `/api/group/all/auth0id`                       | Anyone with JWT    | Gets all groups that belongs to the user   |
 | POST   | `/api/group`                                   | Anyone with JWT    | Creates group                              |
 | PUT    | `/api/group/join-group/:secretCode`            | Anyone with JWT    | Lets user join group                       |
 | PUT    | `/api/group/id/:groupId`                       | Anyone             | Update group by id                         |
