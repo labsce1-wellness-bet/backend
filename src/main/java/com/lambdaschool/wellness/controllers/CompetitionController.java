@@ -44,6 +44,11 @@ public class CompetitionController {
         return new ResponseEntity<>(competition, HttpStatus.OK);
     }
 
+    @GetMapping("/group/id/{groupId}")
+    public ResponseEntity<?> getCompetitionsByGroupId(@PathVariable(value = "groupId") long groupId) {
+        Group group = groupRepo.findByGroupId(groupId);
+        return new ResponseEntity<>(group.getCompetitions(), HttpStatus.OK);
+    }
     @PostMapping("/group/id/{groupId}")
     public Competition addCompetitionToGroup(@PathVariable(value = "groupId") Long groupId,
             @Valid @RequestBody Competition competition) throws Exception {
