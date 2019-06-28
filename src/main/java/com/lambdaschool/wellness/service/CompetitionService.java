@@ -18,7 +18,7 @@ public class CompetitionService
 
     public Competition findById(Long compid){
 
-        return competitionRepository.findCompetitionByCompid(compid);
+        return competitionRepository.findCompetitionByCompId(compid);
     }
 
     public Competition save(Competition newComp)

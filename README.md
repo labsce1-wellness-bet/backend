@@ -45,64 +45,45 @@ To get the server running locally:
 
 🚫This is a placeholder, replace the endpoints, access controll, and descriptioin to match your project
 
-#### User Routes
-
-| Method | Endpoint                   | Access Control | Description                               |
-| ------ | -------------------------- | -------------- | ----------------------------------------- |
-| GET    | `/api/user/all`            | admin          | Returns list and information on all users |
-| GET    | `/api/user/:userId`        | all users      | Retrieve data of one user by id           |
-| POST   | `/api/user`                | none           | Create new user                           |
-| DELETE | `/api/user/:userid`        | all users      | delete user                               |
-| PUT    | `/api/user/:userid`        | all users      | update user                               |
-| PUT    | `/api/user/:userid/fitbit` | all users      | Add tokens for fitbit                     |
-
 #### Group Routes
 
-| Method | Endpoint               | Access Control | Description |
-| ------ | ---------------------- | -------------- | ----------- |
-| GET    | `/api/groups/all`      | all users      |             |
-| POST   | `/api/groups`          | Admin of group |             |
-| PUT    | `/api/groups/:groupid` | Admin of group |             |
-| DELETE | `/api/groups/:groupid` | Admin of group |             |
-| GET    | `/api/groups/:groupid` | all users      |             |
+| Method | Endpoint                                       | Access Control     | Description                                |
+| ------ | ---------------------------------------------- | ------------------ | ------------------------------------------ |
+| GET    | `/api/group/all`                               | Wellness Bet Admin | Get all groups                             |
+| GET    | `/api/group/id/:groupId`                       | Anyone with JWT    | Gets group by id                           |
+| GET    | `/api/group/id/{groupId}/public/all/user-info` | Users in groups    | Gets all users' public info in group       |
+| GET    | `/api/group/all/admin`                         | Admin of group     | Gets all groups that belongs to that admin |
+| GET    | `/api/group/all/auth0id`                       | Anyone with JWT    | Gets all groups that belongs to the user   |
+| POST   | `/api/group`                                   | Anyone with JWT    | Creates group                              |
+| PUT    | `/api/group/join-group/:secretCode`            | Anyone with JWT    | Lets user join group                       |
+| PUT    | `/api/group/id/:groupId`                       | Anyone             | Update group by id                         |
+| DELETE | `/api/group/id/:groupId`                       | Wellness Bet Admin | Delete group by id                         |
+| DELETE | `/api/group/id/:groupId/admin`                 | Admin of group     | Delete group by id                         |
+
+#### Competition Routes
+
+| Method | Endpoint                       | Access Control | Description                              |
+| ------ | ------------------------------ | -------------- | ---------------------------------------- |
+| GET    | `/api/competition/all`         | Anyone         | Get all competitions from all groups     |
+| GET    | `/api/competition/id/:compId`  | Anyone         | Get compeitition by id                   |
+| POST   | `/api/competition/id/:groupId` | Admin of Group | Create competition for group by group id |
+| PUT    | `/api/competition/id/:compId`  | Anyone         | Update competition by id                 |
+| DELETE | `/api/competition/id/:compId`  | Anyone         | Delete competition by id                 |
+
+#### Competitor Routes
+
+| Method | Endpoint                                                     | Access Control  | Description                                               |
+| ------ | ------------------------------------------------------------ | --------------- | --------------------------------------------------------- |
+| GET    | `/api/competitor/all`                                        | Anyone          | Get all competitors from all competitions                 |
+| GET    | `/api/competitor/id`                                         | Anyone          | Get competitor by id                                      |
+| GET    | `/api/competitor/competition/id/:competitionId`              | Anyone          | Get all competitors by competition id                     |
+| GET    | `/api/competitor/public/users/competition/id/:competitionId` | Anyone          | Get all competitors public information by competitiono id |
+| POST   | `/api/competitor/competition/id/:competitionId`              | Anyone with JWT | Create competitor and connect it to competition by id     |
+| PUT    | `/api/competitor/id/:competitionId`                          | Anyone          | Update competitor by id                                   |
 
 # Data Model
 
-🚫This is just an example. Replace this with your data model
-
-#### USERS
-
----
-
-```
-{
-  id: UUID
-  fname: STRING
-  lname: STRING
-  fullname: STRING
-  email: STRING
-}
-```
-
-#### GROUPS
-
----
-
-```
-{
-  id: UUID
-  name: STRING
-  message:STRING
-  activity:STRING
-  goal: INT
-  admin: STRING
-  bet_amount: INT
-  invite_code: STRING
-  start_date: STRING
-  end_date: STRING
-
-}
-```
+[Data models design](https://dbdiagram.io/d/5d0fef6837c1673299daff7a)
 
 ## 2️⃣ Actions
 

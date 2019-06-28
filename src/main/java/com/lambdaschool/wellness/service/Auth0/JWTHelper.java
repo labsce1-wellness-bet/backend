@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.Verification;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.interfaces.RSAPublicKey;
 
 public class JWTHelper {
@@ -25,5 +26,12 @@ public class JWTHelper {
         Verification verifier = JWT.require(algorithm);
         verifier.build().verify(decodedJWT);
     }
-}
 
+    public static DecodedJWT decodeJWTWithVerify(HttpServletRequest request) throws Exception {
+        String token = request.getHeader("Authorization").split(" ")[1];
+        DecodedJWT decodedJWT = JWTHelper.getDecodedJWT(token);
+        Jwk jwk = JWTHelper.getJwk(decodedJWT);
+        JWTHelper.verifyDecodedJWT(jwk, decodedJWT);
+        return decodedJWT;
+    }
+}

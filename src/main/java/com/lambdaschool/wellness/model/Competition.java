@@ -1,9 +1,13 @@
 package com.lambdaschool.wellness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lambdaschool.wellness.lib.enums.CompetitionStatus;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -13,90 +17,133 @@ public class Competition
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long compid;
+    private long compId;
     private String competitionType;
     private double betAmount;
     private String message;
-    private String startDate;
-    private String endDate;
+    private Date startDate;
+    private Date endDate;
+    private String winnerId;
+    private double totalPot;
 
-    @ManyToMany(mappedBy = "competition")
-    private Set<User>  users = new HashSet<>();
+    private CompetitionStatus competitionStatus;
 
+
+    @ManyToOne(fetch= FetchType.LAZY, optional = false)
+    @JoinColumn(name = "groupId",  nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private Group group;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "competition", cascade = CascadeType.ALL)
+    private Set<Competitor> competitors;
 
     public Competition()
     {
         //
     }
 
-    public Set<User> getUsers()
-    {
-        return users;
+
+    public Competition(String competitionType, double betAmount, String message, Date startDate, Date endDate, String winnerId, double totalPot, CompetitionStatus competitionStatus, Group group, Set<Competitor> competitors) {
+        this.competitionType = competitionType;
+        this.betAmount = betAmount;
+        this.message = message;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.winnerId = winnerId;
+        this.totalPot = totalPot;
+        this.competitionStatus = competitionStatus;
+        this.group = group;
+        this.competitors = competitors;
     }
 
-    public void setUsers(Set<User> users)
-    {
-        this.users = users;
+
+    public double getTotalPot() {
+        return totalPot;
     }
 
-    public String getCompetitionType()
-    {
-        return competitionType;
+    public void setTotalPot(double totalPot) {
+        this.totalPot = totalPot;
     }
 
-    public void setCompetitionType(String competitionType)
-    {
+    public Set<Competitor> getCompetitors() {
+        return competitors;
+    }
+
+    public void setCompetitors(Set<Competitor> competitors) {
+        this.competitors = competitors;
+    }
+
+    public CompetitionStatus getCompetitionStatus() {
+        return competitionStatus;
+    }
+
+    public void setCompetitionStatus(CompetitionStatus competitionStatus) {
+        this.competitionStatus = competitionStatus;
+    }
+
+    public String getWinnerId() {
+        return winnerId;
+    }
+
+    public void setWinnerId(String winnerId) {
+        this.winnerId = winnerId;
+    }
+
+    public long getCompId() {
+        return compId;
+    }
+
+    public void setCompId(long compId) {
+        this.compId = compId;
+    }
+
+    public void setCompetitionType(String competitionType) {
         this.competitionType = competitionType;
     }
 
-    public long getCompid()
-    {
-        return compid;
-    }
-
-    public void setCompid(long compid)
-    {
-        this.compid = compid;
-    }
-
-    public double getBetAmount()
-    {
+    public double getBetAmount() {
         return betAmount;
     }
 
-    public void setBetAmount(double betAmount)
-    {
+    public void setBetAmount(double betAmount) {
         this.betAmount = betAmount;
     }
 
-    public String getMessage()
-    {
+    public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message)
-    {
+    public void setMessage(String message) {
         this.message = message;
     }
 
-    public String getStartDate()
-    {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate)
-    {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate()
-    {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate)
-    {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
+    public String getCompetitionType() {
+        return competitionType;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
 }

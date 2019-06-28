@@ -1,112 +1,91 @@
 package com.lambdaschool.wellness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "wellness_groups")
 @Data
-
 public class Group
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long groupid;
-    private String group_name;
-    private int goal;
+    private long groupId;
+
+    @Column(unique=true)
+    private String groupName;
     //Todo:change it to string min 6 hours
-    private String admin;
-    private String invite_code;
+    private String secretCode;
 
+    private String adminId;
 
-    @ManyToMany(mappedBy = "group")
-    private Set<User> users = new HashSet<>();
+    @ElementCollection
+    private Set<String> auth0Ids;
 
-    public Group()
-    {
-        //default constructor
-    }
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Competition> competitions;
 
-    public Group(String group_name, int goal, String admin, int bet_amount, String invite_code, String start_date,
-            String end_date, String message, Group competition) {
-        this.group_name = group_name;
-        this.goal = goal;
-        this.admin = admin;
-        this.invite_code = invite_code;
+    public Group() {
 
     }
 
-
-    public Set<User> getUsers()
-    {
-        return users;
+    public Group(String groupName, String secretCode, String adminId, Set<String> auth0Ids, Set<Competition> competitions) {
+        this.groupName = groupName;
+        this.secretCode = secretCode;
+        this.adminId = adminId;
+        this.auth0Ids = auth0Ids;
+        this.competitions = competitions;
     }
 
-    public void setUsers(Set<User> users)
-    {
-        this.users = users;
+    public Set<String> getAuth0Ids() {
+        return auth0Ids;
     }
 
-    public long getGroupid()
-    {
-        return groupid;
+    public void setAuth0Ids(Set<String> auth0Ids) {
+        this.auth0Ids = auth0Ids;
     }
 
-    public void setGroupid(long groupid)
-    {
-        this.groupid = groupid;
+    public long getGroupId() {
+        return groupId;
     }
 
-    public String getGroup_name()
-    {
-        return group_name;
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
     }
 
-    public void setGroup_name(String group_name)
-    {
-        this.group_name = group_name;
+    public String getGroupName() {
+        return groupName;
     }
 
-    public int getGoal()
-    {
-        return goal;
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
-    public void setGoal(int goal)
-    {
-        this.goal = goal;
+    public String getSecretCode() {
+        return secretCode;
     }
 
-    public String getAdmin()
-    {
-        return admin;
+    public void setSecretCode(String inviteCode) {
+        this.secretCode = inviteCode;
     }
 
-    public void setAdmin(String admin)
-    {
-        this.admin = admin;
+    public String getAdminId() {
+        return adminId;
     }
 
-    public String getInvite_code() {
-        int length = 7;
-        final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        Random random = new Random();
-        StringBuilder builder = new StringBuilder(length);
-        for (int i = 0; i < length; i++) {
-            builder.append(ALPHABET.charAt(random.nextInt(ALPHABET.length())));
-
-        }
-    return builder.toString();
-
-
+    public void setAdminId(String adminId) {
+        this.adminId = adminId;
     }
 
-        public void setInvite_code(String invite_code)
-        {
-            this.invite_code = invite_code;
-        }
+    public Set<Competition> getCompetitions() {
+        return competitions;
+    }
 
-
+    public void setCompetitions(Set<Competition> competitions) {
+        this.competitions = competitions;
+    }
 }
