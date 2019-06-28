@@ -72,11 +72,14 @@ To get the server running locally:
 
 #### Competitor Routes
 
-| Method | Endpoint                                        | Access Control  | Description                                           |
-| ------ | ----------------------------------------------- | --------------- | ----------------------------------------------------- |
-| GET    | `/api/competitor/all`                           | Anyone          | Get all competitors from all competitions             |
-| GET    | `/api/competitor/id`                            | Anyone          | Get competitor by id                                  |
-| POST   | `/api/competitor/competition/id/:competitionId` | Anyone with JWT | Create competitor and connect it to competition by id |
+| Method | Endpoint                                                     | Access Control  | Description                                               |
+| ------ | ------------------------------------------------------------ | --------------- | --------------------------------------------------------- |
+| GET    | `/api/competitor/all`                                        | Anyone          | Get all competitors from all competitions                 |
+| GET    | `/api/competitor/id`                                         | Anyone          | Get competitor by id                                      |
+| GET    | `/api/competitor/competition/id/:competitionId`              | Anyone          | Get all competitors by competition id                     |
+| GET    | `/api/competitor/public/users/competition/id/:competitionId` | Anyone          | Get all competitors public information by competitiono id |
+| POST   | `/api/competitor/competition/id/:competitionId`              | Anyone with JWT | Create competitor and connect it to competition by id     |
+| PUT    | `/api/competitor/id/:competitionId`                          | Anyone          | Update competitor by id                                   |
 
 # Data Model
 

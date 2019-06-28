@@ -5,7 +5,6 @@ import com.lambdaschool.wellness.model.Group;
 import com.lambdaschool.wellness.repository.GroupRepository;
 import com.lambdaschool.wellness.service.Auth0.JWTHelper;
 import kong.unirest.HttpResponse;
-import kong.unirest.JacksonObjectMapper;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping(value = "/api/group")
+@SuppressWarnings("Duplicates")
 public class GroupController
 {
     @Autowired
@@ -73,8 +73,7 @@ public class GroupController
                 findUsersByIdQuery = findUsersByIdQuery.concat(")");
             }
         }
-        //TODO: Have to figure out how where to place Unirest config property, since its a configuration for every file
-        Unirest.config().setObjectMapper(new JacksonObjectMapper());
+
         Map<String, String> headers = new HashMap<>();
         //Need AUTH0_MANAGEMENT_TOKEN to work with the Auth0 Management API
         headers.put("Authorization", "Bearer " + System.getenv("AUTH0_MANAGEMENT_TOKEN"));
