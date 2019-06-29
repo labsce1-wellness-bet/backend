@@ -166,20 +166,12 @@ public class GroupController
         return null;
     }
     @PutMapping("/id/{groupId}")
-    public ResponseEntity<?> updateGroup(@RequestBody Group group, @PathVariable long groupId)
+    public ResponseEntity<?> updateGroup(@RequestBody Group newGroup, @PathVariable long groupId)
     {
-        Group newGroup = new Group();
-        //Group newGroup = groupService.findById(groupid);
-
-        newGroup.setGroupId(groupId);
-        newGroup.setGroupName(group.getGroupName());
-        newGroup.setAdminId(group.getAdminId());
-        newGroup.setSecretCode(group.getSecretCode());
-        groupRepo.save(newGroup);
-
-        return new ResponseEntity<>(newGroup,HttpStatus.OK);
-
-
+        Group group = groupRepo.findByGroupId(groupId);
+        group.setGroupName(newGroup.getGroupName());
+        group = groupRepo.save(group);
+        return new ResponseEntity<>(group, HttpStatus.OK);
     }
 
 }
