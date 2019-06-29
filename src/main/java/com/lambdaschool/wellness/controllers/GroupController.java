@@ -120,8 +120,8 @@ public class GroupController
         Set<String> newSet = new HashSet<>();
         newSet.add(decodedJWT.getSubject());
         newGroup.setAuth0Ids(newSet);
-        //Save the new group into the database
         newGroup.getAuth0Ids().add(decodedJWT.getSubject());
+        //Save the new group into the database
         newGroup = groupRepo.save(newGroup);
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/groupId").buildAndExpand(newGroup.getGroupId()).toUri();
