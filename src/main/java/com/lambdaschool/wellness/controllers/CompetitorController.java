@@ -109,10 +109,10 @@ public class CompetitorController {
     }
 
     @PutMapping("/id/{competitorId}")
-    public ResponseEntity<?> updateCompetitor(@RequestBody Competitor dataUpdates, @PathVariable long competitorId) {
+    public ResponseEntity<?> updateCompetitor(@RequestBody Competitor newCompetitor, @PathVariable long competitorId) {
         Competitor competitor = competitorRepo.findById(competitorId);
-        competitor.setHasUploadedReceipt(dataUpdates.isHasUploadedReceipt());
-        competitor.setApproved(dataUpdates.isApproved());
+        competitor.setHasUploadedReceipt(newCompetitor.isHasUploadedReceipt());
+        competitor.setApproved(newCompetitor.isApproved());
         competitor = competitorRepo.save(competitor);
         return new ResponseEntity<>(competitor, HttpStatus.OK);
     }
