@@ -46,6 +46,7 @@ public class CompetitorController {
     public ResponseEntity<?> getCompetitorsByCompetitionId(@PathVariable long compId) {
         Competition competition = competitionRepo.findCompetitionByCompId(compId);
         Set<Competitor> competitors = competition.getCompetitors();
+
         return new ResponseEntity<>(competitors, HttpStatus.OK);
     }
     @GetMapping("/public/users/competition/id/{compId}")
@@ -54,11 +55,9 @@ public class CompetitorController {
         Set<Competitor> competitorsSet = competition.getCompetitors();
         Set<String> auth0Ids = new HashSet<>();
 
-        Iterator<Competitor> itrCompetitors = competitorsSet.iterator();
-        while(itrCompetitors.hasNext()) {
-            auth0Ids.add(itrCompetitors.next().getAuth0Id());
+        for(Competitor competitor : competitorsSet) {
+            auth0Ids.add(competitor.getAuth0Id());
         }
-
         HttpResponse<JsonNode> jsonResponse = ManagementAPIHelper
                 .getUsersInfoFromAuth0(auth0Ids, "user_metadata,email,user_id");
 
