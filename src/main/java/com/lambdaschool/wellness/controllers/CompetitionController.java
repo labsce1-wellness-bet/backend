@@ -44,6 +44,12 @@ public class CompetitionController {
         return new ResponseEntity<>(competition, HttpStatus.OK);
     }
 
+//    @GetMapping("/public/winner-info")
+//    public ResponseEntity<?> getWinnerPublicInfo() {
+//
+//        return new ResponseEntity<>(, HttpStatus.OK);
+//    }
+
     @GetMapping("/group/id/{groupId}")
     public ResponseEntity<?> getCompetitionsByGroupId(@PathVariable(value = "groupId") long groupId) {
         Group group = groupRepo.findByGroupId(groupId);

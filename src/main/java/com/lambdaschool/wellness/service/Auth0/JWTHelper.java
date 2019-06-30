@@ -9,7 +9,7 @@ import com.auth0.jwt.interfaces.Verification;
 import javax.servlet.http.HttpServletRequest;
 import java.security.interfaces.RSAPublicKey;
 
-public class JWTHelper {
+public final class JWTHelper {
 
     public static DecodedJWT getDecodedJWT(String token) {
       DecodedJWT decodedJWT = JWT.decode(token);

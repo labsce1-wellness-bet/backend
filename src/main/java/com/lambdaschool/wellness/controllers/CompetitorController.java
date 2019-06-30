@@ -6,9 +6,9 @@ import com.lambdaschool.wellness.model.Competitor;
 import com.lambdaschool.wellness.repository.CompetitionRepository;
 import com.lambdaschool.wellness.repository.CompetitorRepository;
 import com.lambdaschool.wellness.service.Auth0.JWTHelper;
+import com.lambdaschool.wellness.service.Auth0.ManagementAPIHelper;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
-import kong.unirest.Unirest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,6 @@ import java.util.*;
 
 @RestController
 @RequestMapping(value = "/api/competitor")
-@SuppressWarnings("Duplicates")
 public class CompetitorController {
     @Autowired
     private CompetitorRepository competitorRepo;
@@ -52,41 +51,16 @@ public class CompetitorController {
     @GetMapping("/public/users/competition/id/{compId}")
     public ResponseEntity<?> getCompetitorsPublicInfoByCompetitionId(@PathVariable long compId) {
         Competition competition = competitionRepo.findCompetitionByCompId(compId);
-        Set<Competitor> competitors = competition.getCompetitors();
-        String idsArr[] = new String[competitors.size()];
-        int i = 0;
-        Iterator<Competitor> iterator = competitors.iterator();
-        while(iterator.hasNext()) {
-            idsArr[i] = iterator.next().getAuth0Id();
-            i++;
+        Set<Competitor> competitorsSet = competition.getCompetitors();
+        Set<String> auth0Ids = new HashSet<>();
+
+        Iterator<Competitor> itrCompetitors = competitorsSet.iterator();
+        while(itrCompetitors.hasNext()) {
+            auth0Ids.add(itrCompetitors.next().getAuth0Id());
         }
-        //TODO: Create a method to create links easier for our Auth0 Management API
-        String findUsersByIdQuery = "user_id:(";
-        for(int j = 0; j < idsArr.length; j++) {
-            String id = idsArr[j];
-            findUsersByIdQuery = findUsersByIdQuery.concat("\"" + id + "\"");
-            if (j != idsArr.length - 1) {
-                findUsersByIdQuery = findUsersByIdQuery.concat(" OR ");
-            }
-            if (j == idsArr.length - 1) {
-                findUsersByIdQuery = findUsersByIdQuery.concat(")");
-            }
-        }
-        Map<String, String> headers = new HashMap<>();
-        //Need AUTH0_MANAGEMENT_TOKEN to work with the Auth0 Management API
-        headers.put("Authorization", "Bearer " + System.getenv("AUTH0_MANAGEMENT_TOKEN"));
 
-        //Specify what I want from the user and find them by their ids
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("fields", "user_metadata,email,user_id");
-
-        queryParams.put("q", findUsersByIdQuery);
-
-        HttpResponse<JsonNode> jsonResponse = Unirest
-                .get("https://akshay-gadkari.auth0.com/api/v2/users")
-                .headers(headers)
-                .queryString(queryParams)
-                .asJson();
+        HttpResponse<JsonNode> jsonResponse = ManagementAPIHelper
+                .getUsersInfoFromAuth0(auth0Ids, "user_metadata,email,user_id");
 
         return new ResponseEntity<>(jsonResponse.getBody().toString(), HttpStatus.OK);
     }
