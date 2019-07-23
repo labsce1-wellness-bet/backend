@@ -17,6 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/api/user/**").allowedOrigins(System.getenv("DOMAIN_NAME"), domain_name)
                 .allowedMethods("GET", "POST", "DELETE", "PUT");
         registry.addMapping("/api/group/**").allowedOrigins(System.getenv("DOMAIN_NAME"));
+	registry.addMapping("/api/group/join-group/**").allowedOrigins(System.getenv("DOMAIN_NAME"));
         registry.addMapping("/api/competition/**").allowedOrigins(System.getenv("DOMAIN_NAME"));
         registry.addMapping("/api/competitor/**").allowedOrigins(System.getenv("DOMAIN_NAME"));
 
