@@ -4,9 +4,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lambdaschool.wellness.model.Group;
 import com.lambdaschool.wellness.repository.GroupRepository;
 import com.lambdaschool.wellness.service.Auth0.JWTHelper;
+import com.lambdaschool.wellness.service.Auth0.ManagementAPIHelper;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
-import kong.unirest.Unirest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,12 +17,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 
 @RestController
 @RequestMapping(value = "/api/group")
-@SuppressWarnings("Duplicates")
 public class GroupController
 {
     @Autowired
@@ -59,35 +61,8 @@ public class GroupController
 
         Group group = groupRepo.findByGroupId(groupId);
 
-        String idsArr[] = new String[group.getAuth0Ids().size()];
-        idsArr = group.getAuth0Ids().toArray(idsArr);
-        //TODO: Create a method to create links easier for our Auth0 Management API
-        String findUsersByIdQuery = "user_id:(";
-        for(int i = 0; i < idsArr.length; i++) {
-            String id = idsArr[i];
-            findUsersByIdQuery = findUsersByIdQuery.concat("\"" + id + "\"");
-            if (i != idsArr.length - 1) {
-                findUsersByIdQuery = findUsersByIdQuery.concat(" OR ");
-            }
-            if (i == idsArr.length - 1) {
-                findUsersByIdQuery = findUsersByIdQuery.concat(")");
-            }
-        }
-
-        Map<String, String> headers = new HashMap<>();
-        //Need AUTH0_MANAGEMENT_TOKEN to work with the Auth0 Management API
-        headers.put("Authorization", "Bearer " + System.getenv("AUTH0_MANAGEMENT_TOKEN"));
-
-        //Specify what I want from the user and find them by their ids
-        Map<String, Object> queryParams = new HashMap<>();
-        queryParams.put("fields", "user_metadata,email");
-        queryParams.put("q", findUsersByIdQuery);
-
-        HttpResponse<JsonNode> jsonResponse = Unirest
-                .get("https://akshay-gadkari.auth0.com/api/v2/users")
-                .headers(headers)
-                .queryString(queryParams)
-                .asJson();
+        HttpResponse<JsonNode> jsonResponse = ManagementAPIHelper
+                .getUsersInfoFromAuth0(group.getAuth0Ids(), "user_metadata,email");
 
         return new ResponseEntity<>(jsonResponse.getBody().toString(), HttpStatus.OK);
     }
@@ -120,8 +95,8 @@ public class GroupController
         Set<String> newSet = new HashSet<>();
         newSet.add(decodedJWT.getSubject());
         newGroup.setAuth0Ids(newSet);
-        //Save the new group into the database
         newGroup.getAuth0Ids().add(decodedJWT.getSubject());
+        //Save the new group into the database
         newGroup = groupRepo.save(newGroup);
         HttpHeaders responseHeaders = new HttpHeaders();
         URI newUserURI = ServletUriComponentsBuilder.fromCurrentRequest().path("/groupId").buildAndExpand(newGroup.getGroupId()).toUri();
@@ -166,20 +141,12 @@ public class GroupController
         return null;
     }
     @PutMapping("/id/{groupId}")
-    public ResponseEntity<?> updateGroup(@RequestBody Group group, @PathVariable long groupId)
+    public ResponseEntity<?> updateGroup(@RequestBody Group newGroup, @PathVariable long groupId)
     {
-        Group newGroup = new Group();
-        //Group newGroup = groupService.findById(groupid);
-
-        newGroup.setGroupId(groupId);
-        newGroup.setGroupName(group.getGroupName());
-        newGroup.setAdminId(group.getAdminId());
-        newGroup.setSecretCode(group.getSecretCode());
-        groupRepo.save(newGroup);
-
-        return new ResponseEntity<>(newGroup,HttpStatus.OK);
-
-
+        Group group = groupRepo.findByGroupId(groupId);
+        group.setGroupName(newGroup.getGroupName());
+        group = groupRepo.save(group);
+        return new ResponseEntity<>(group, HttpStatus.OK);
     }
 
 }

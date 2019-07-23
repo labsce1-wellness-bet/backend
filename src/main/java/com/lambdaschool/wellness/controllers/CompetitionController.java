@@ -44,6 +44,12 @@ public class CompetitionController {
         return new ResponseEntity<>(competition, HttpStatus.OK);
     }
 
+//    @GetMapping("/public/winner-info")
+//    public ResponseEntity<?> getWinnerPublicInfo() {
+//
+//        return new ResponseEntity<>(, HttpStatus.OK);
+//    }
+
     @GetMapping("/group/id/{groupId}")
     public ResponseEntity<?> getCompetitionsByGroupId(@PathVariable(value = "groupId") long groupId) {
         Group group = groupRepo.findByGroupId(groupId);
@@ -74,18 +80,19 @@ public class CompetitionController {
     }
 
     @PutMapping("/id/{compId}")
-    public ResponseEntity<?> saveComp(@RequestBody Competition competition, @PathVariable long compId) {
-        Competition newComp = new Competition();
+    public ResponseEntity<?> saveComp(@RequestBody Competition newComp, @PathVariable long compId) {
 
-        newComp.setCompId(compId);
-        newComp.setCompetitionType(competition.getCompetitionType());
-        newComp.setMessage(competition.getMessage());
-        newComp.setBetAmount(competition.getBetAmount());
-        newComp.setStartDate(competition.getStartDate());
-        newComp.setEndDate(competition.getEndDate());
-        competitionService.save(newComp);
+        Competition competition = competitionRepo.findCompetitionByCompId(compId);
 
-        return new ResponseEntity<>(newComp, HttpStatus.OK);
+        competition.setCompetitionType(newComp.getCompetitionType());
+        competition.setMessage(newComp.getMessage());
+        competition.setBetAmount(newComp.getBetAmount());
+        competition.setStartDate(newComp.getStartDate());
+        competition.setEndDate(newComp.getEndDate());
+
+        competition = competitionService.save(competition);
+
+        return new ResponseEntity<>(competition, HttpStatus.OK);
 
     }
 
